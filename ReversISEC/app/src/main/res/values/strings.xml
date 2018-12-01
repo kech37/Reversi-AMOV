@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ReversISEC</string>
+    <string name="new_game">New Game</string>
+    <string name="profile">Profile</string>
+    <string name="single_player">Single Player</string>
+    <string name="multiplayer">Multiplayer</string>
+</resources>

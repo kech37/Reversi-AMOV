@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReversISEC</string>
+    <string name="new_game">Novo Jogo</string>
+    <string name="profile">Perfil</string>
+    <string name="single_player">1 Jogador</string>
+    <string name="multiplayer">2 Jogadores</string>
+</resources>
