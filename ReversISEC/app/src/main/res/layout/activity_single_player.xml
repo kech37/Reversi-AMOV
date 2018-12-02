@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SinglePlayer"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="15dp"
     android:id="@+id/gameBoard">
 
 
