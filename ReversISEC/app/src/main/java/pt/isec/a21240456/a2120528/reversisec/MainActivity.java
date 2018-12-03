@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSinlgePlayer(View view){
-        Intent intent = new Intent(this, SinglePlayer.class);
+        Intent intent = new Intent(this, PlayGame.class);
+        intent.putExtra("mode", PlayGame.SINGLE_PLAYER);
         startActivity(intent);
     }
 }
