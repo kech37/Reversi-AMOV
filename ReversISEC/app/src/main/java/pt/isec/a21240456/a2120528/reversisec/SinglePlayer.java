@@ -1,7 +1,6 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -10,64 +9,39 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Random;
+import pt.isec.a21240456.a2120528.reversisec.Board;
 
-public class PlayGame extends AppCompatActivity {
-    public static final int SINGLE_PLAYER = 1;
-    public static final int LOCAL_MULTYPLAYER = 2;
-    public static final int NETWORK_MULTYPLAYER = 3;
+public class SinglePlayer extends AppCompatActivity {
 
     private final int maxN = 8;
-
     private ImageView[][] ivCells = new ImageView[maxN][maxN];
     private Drawable[] drawCells = new Drawable[3];
-    private Player[] players = new Player[2];
-
-    private int gameMode;
     private Context context;
     private Board board = new Board();
-
-    private TextView tvPlayerTurn;
-
-    private int playerTurn;
-    private char turnColor = 'b';
+    private int playerTurn = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game);
+        setContentView(R.layout.activity_single_player);
 
         context = this;
-        tvPlayerTurn = (TextView) findViewById(R.id.tvPlayerTurn);
 
-        Intent intent = getIntent();
-        if(intent != null){
-            gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
-        }
-
-        players[0] = new Player("Player 1", false);
-        players[1] = new Player("Bot", true);
-
-        initBoardGame();
+        loadResources();
+        configGameBoard();
         drawBoard();
-        initGame();
     }
 
-    private void initGame() {
-        Random random = new Random();
-        playerTurn = random.nextInt(1);
-        players[playerTurn].setColor(0);
-        tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
-    }
-
-    private void initBoardGame() {
+    private void loadResources() {
         drawCells[0] = ContextCompat.getDrawable(context, R.drawable.cell_empty_bg);
         drawCells[1] = ContextCompat.getDrawable(context, R.drawable.cell_black_player_bg);
         drawCells[2] = ContextCompat.getDrawable(context, R.drawable.cell_white_player_bg);
 
+    }
+
+    private void configGameBoard(){
         LinearLayout llGameBoard = findViewById(R.id.gameBoard);
         int cellSize = Math.round(getScreenSizeMinusPadding() / maxN);
 
@@ -78,14 +52,18 @@ public class PlayGame extends AppCompatActivity {
             LinearLayout linRow = new LinearLayout(context);
             for (int j = 0; j < maxN; j++) {
                 ivCells[i][j] = new ImageView(context);
-
                 final int x = i;
                 final int y = j;
                 ivCells[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        makeMove(x, y);
-                        Toast.makeText(context, "(" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
+                        if(playerTurn == 1){
+                            //Toast.makeText(context, "(X: " + x + "; Y: " + y + ")", Toast.LENGTH_SHORT).show();
+                            board.makeMove(x, y);
+                            drawBoard();
+                        }else{
+                            Toast.makeText(context, "Not your turn", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 linRow.addView(ivCells[i][j], llCell);
@@ -98,7 +76,7 @@ public class PlayGame extends AppCompatActivity {
         return context.getResources().getDisplayMetrics().widthPixels - dpToPixels(32, context);
     }
 
-    private int dpToPixels(float dp, Context context) {
+    public static int dpToPixels(float dp, Context context) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
@@ -118,24 +96,5 @@ public class PlayGame extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    private void makeMove(int x, int y){
-        switch (gameMode){
-            case SINGLE_PLAYER:
-                    if(players[playerTurn].isBot()){
-                        //TODO: Bot logiv
-                    }
-                    board.makeMove(playerTurn == 0 ? 'b' : 'w', x, y);
-                    if(playerTurn == 0){
-                        playerTurn = 1;
-                    }else{
-                        playerTurn = 0;
-                    }
-                    tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
-                    drawBoard();
-                break;
-        }
-
     }
 }

@@ -2,50 +2,61 @@ package pt.isec.a21240456.a2120528.reversisec;
 
 import java.util.Arrays;
 
+//0 -> empty board
+//1 -> black piece
+//2 -> white piece
+//3 -> possible move
 public class Board {
+    static final int EMPTY = 0;
+    static final int WHITE = 1;
+    static final int BLACK = 2;
 
     private final int boardSize = 8;
-    private char[][] cells = new char[boardSize][boardSize];
-    char turn;
+    private int[][] cells = new int[boardSize][boardSize];
+    int turn = BLACK;
+    int nPlays = 0;
 
     public Board() {
         newGame();
     }
 
     public void newGame() {
-        for (char[] row : cells)
-            Arrays.fill(row,' ');
+        for (int[] row : cells)
+            Arrays.fill(row, 0);
 
-        turn = 'b';
-
-        addPiece('w', 3, 3);
-        addPiece('b', 3, 4);
-        addPiece('b', 4, 3);
-        addPiece('w', 4, 4);
+        addPiece(WHITE, 3, 3);
+        addPiece(BLACK, 3, 4);
+        addPiece(BLACK, 4, 3);
+        addPiece(WHITE, 4, 4);
     }
 
-    public char getCell(int i, int j) {
+    public int getCell(int i, int j) {
         return cells[i][j];
     }
 
-    public boolean makeMove(char turn , int row, int col) {
+    public boolean makeMove(int row, int col) {
 
         if(checkMove(turn, row, col)) {
             addPiece(turn, row, col);
+            if(turn == BLACK)
+                turn = WHITE;
+            else
+                turn = WHITE;
+
             return true;
         }
         else
             return false;
     }
 
-    public void addPiece(char turn, int row, int col) {
-            cells[row][col] = turn;
+    public void addPiece(int turn, int row, int col) {
+        cells[row][col] = turn;
     }
 
-    public boolean checkMove(char turn, int row, int col) {
+    public boolean checkMove(int turn, int row, int col) {
         boolean nw, nn, ne, ww, ee, sw, ss, se;
 
-        if(cells[row][col] != ' ')
+        if(cells[row][col] != EMPTY)
             return false;
 
         nw = validMove(turn, row, col, -1, -1);
@@ -63,16 +74,16 @@ public class Board {
             return false;
     }
 
-    public boolean validMove(char turn, int row, int col, int drow, int dcol) {
+    public boolean validMove(int turn, int row, int col, int drow, int dcol) {
 
         boolean firstCheck = true;
         char other;
-        char lastPiece = ' ';
+        int lastPiece = EMPTY;
 
-        if (turn == 'b')
-            other = 'w';
-        else if (turn == 'w')
-            other = 'b';
+        if (turn == BLACK)
+            other = WHITE;
+        else if (turn == WHITE)
+            other = BLACK;
         else
             return false;
 
