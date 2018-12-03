@@ -106,13 +106,13 @@ public class PlayGame extends AppCompatActivity {
         for (int i = 0; i < maxN; i++) {
             for (int j = 0; j < maxN; j++) {
                 switch(board.getCell(i, j)) {
-                    case ' ':
+                    case Board.EMPTY:
                         ivCells[i][j].setBackground(drawCells[0]);
                         break;
-                    case 'b':
+                    case Board.BLACK:
                         ivCells[i][j].setBackground(drawCells[1]);
                         break;
-                    case 'w':
+                    case Board.WHITE:
                         ivCells[i][j].setBackground(drawCells[2]);
                         break;
                 }
@@ -124,14 +124,9 @@ public class PlayGame extends AppCompatActivity {
         switch (gameMode){
             case SINGLE_PLAYER:
                     if(players[playerTurn].isBot()){
-                        //TODO: Bot logiv
+                        //TODO: Bot logic
                     }
                     board.makeMove(x, y);
-                    if(playerTurn == 0){
-                        playerTurn = 1;
-                    }else{
-                        playerTurn = 0;
-                    }
                     tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
                     drawBoard();
                 break;
