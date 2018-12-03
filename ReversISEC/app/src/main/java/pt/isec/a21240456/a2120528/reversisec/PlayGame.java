@@ -58,12 +58,9 @@ public class PlayGame extends AppCompatActivity {
 
     private void initGame() {
         Random random = new Random();
-        playerTurn = random.nextInt(2) + 1;
-        if(playerTurn == 1){
-            tvPlayerTurn.setText(players[0].getName());
-        }else{
-            tvPlayerTurn.setText(players[1].getName());
-        }
+        playerTurn = random.nextInt(1);
+        players[playerTurn].setColor(0);
+        tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
     }
 
     private void initBoardGame() {
@@ -126,7 +123,17 @@ public class PlayGame extends AppCompatActivity {
     private void makeMove(int x, int y){
         switch (gameMode){
             case SINGLE_PLAYER:
-
+                    if(players[playerTurn].isBot()){
+                        //TODO: Bot logiv
+                    }
+                    board.makeMove(playerTurn == 0 ? 'b' : 'w', x, y);
+                    if(playerTurn == 0){
+                        playerTurn = 1;
+                    }else{
+                        playerTurn = 0;
+                    }
+                    tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
+                    drawBoard();
                 break;
         }
 

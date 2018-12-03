@@ -2,6 +2,7 @@ package pt.isec.a21240456.a2120528.reversisec;
 
 public class Player {
     private String name;
+    private int color = 1;
     private boolean bot;
 
     public Player(String name, boolean bot) {
@@ -15,5 +16,13 @@ public class Player {
 
     public boolean isBot() {
         return bot;
+    }
+
+    public void setColor(int value) {
+       color = value;
+    }
+
+    public int getColor() {
+        return color;
     }
 }
