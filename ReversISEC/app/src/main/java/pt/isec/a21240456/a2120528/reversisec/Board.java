@@ -45,7 +45,7 @@ public class Board {
     public boolean checkMove(char turn, int row, int col) {
         boolean nw, nn, ne, ww, ee, sw, ss, se;
 
-        if(cells[row][col] == ' ')
+        if(cells[row][col] != ' ')
             return false;
 
         nw = validMove(turn, row, col, -1, -1);
@@ -85,9 +85,10 @@ public class Board {
 
         for(int i = row + drow, j=col + dcol; i<boardSize || j<boardSize; i+=drow, j+=dcol) {
             if(cells[i][j] == other) {
+                firstCheck = false;
                 continue;
             }
-            else if(!firstCheck){
+            else if(!firstCheck && cells[i][j] == turn){
                 lastPiece = cells[i][j];
                 break;
             }

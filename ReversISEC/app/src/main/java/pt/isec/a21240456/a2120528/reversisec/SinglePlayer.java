@@ -59,7 +59,7 @@ public class SinglePlayer extends AppCompatActivity {
                     public void onClick(View view) {
                         if(playerTurn == 1){
                             //Toast.makeText(context, "(X: " + x + "; Y: " + y + ")", Toast.LENGTH_SHORT).show();
-                            board.addPiece('w', x, y);
+                            board.makeMove('w', x, y);
                             drawBoard();
                         }else{
                             Toast.makeText(context, "Not your turn", Toast.LENGTH_SHORT).show();
