@@ -126,7 +126,7 @@ public class PlayGame extends AppCompatActivity {
                     if(players[playerTurn].isBot()){
                         //TODO: Bot logiv
                     }
-                    board.makeMove(playerTurn == 0 ? 'b' : 'w', x, y);
+                    board.makeMove(x, y);
                     if(playerTurn == 0){
                         playerTurn = 1;
                     }else{
