@@ -23,7 +23,7 @@ public class PlayGame extends AppCompatActivity {
     private final int maxN = 8;
 
     private ImageView[][] ivCells = new ImageView[maxN][maxN];
-    private Drawable[] drawCells = new Drawable[3];
+    private Drawable[] drawCells = new Drawable[4];
     private Player[] players = new Player[2];
 
     private int gameMode;
@@ -67,6 +67,7 @@ public class PlayGame extends AppCompatActivity {
         drawCells[0] = ContextCompat.getDrawable(context, R.drawable.cell_empty_bg);
         drawCells[1] = ContextCompat.getDrawable(context, R.drawable.cell_black_player_bg);
         drawCells[2] = ContextCompat.getDrawable(context, R.drawable.cell_white_player_bg);
+        drawCells[3] = ContextCompat.getDrawable(context, R.drawable.cell_possible_move);
 
         LinearLayout llGameBoard = findViewById(R.id.gameBoard);
         int cellSize = Math.round(getScreenSizeMinusPadding() / maxN);
@@ -114,6 +115,9 @@ public class PlayGame extends AppCompatActivity {
                         break;
                     case Board.WHITE:
                         ivCells[i][j].setBackground(drawCells[2]);
+                        break;
+                    case Board.POSSIBLE_MOVE:
+                        ivCells[i][j].setBackground(drawCells[3]);
                         break;
                 }
             }

@@ -10,11 +10,11 @@ public class Board {
     static final int EMPTY = 0;
     static final int WHITE = 1;
     static final int BLACK = 2;
+    static final int POSSIBLE_MOVE = 3;
 
     private final int boardSize = 8;
     private int[][] cells = new int[boardSize][boardSize];
     int turn = BLACK;
-    int nPlays = 0;
 
     public Board() {
         newGame();
@@ -28,6 +28,8 @@ public class Board {
         addPiece(BLACK, 3, 4);
         addPiece(BLACK, 4, 3);
         addPiece(WHITE, 4, 4);
+
+        checkNextTurnPossibleMoves(turn);
     }
 
     public int getCell(int i, int j) {
@@ -36,12 +38,14 @@ public class Board {
 
     public boolean makeMove(int row, int col) {
 
-        if(checkMove(turn, row, col)) {
+        if(checkMove(turn, row, col, false)) {
             addPiece(turn, row, col);
             if(turn == BLACK)
                 turn = WHITE;
             else
-                turn = WHITE;
+                turn = BLACK;
+
+            checkNextTurnPossibleMoves(turn);
 
             return true;
         }
@@ -53,20 +57,20 @@ public class Board {
         cells[row][col] = turn;
     }
 
-    public boolean checkMove(int turn, int row, int col) {
+    public boolean checkMove(int turn, int row, int col, boolean possible) {
         boolean nw, nn, ne, ww, ee, sw, ss, se;
 
-        if(cells[row][col] != EMPTY)
+        if(cells[row][col] != EMPTY && cells[row][col] != POSSIBLE_MOVE)
             return false;
 
-        nw = validMove(turn, row, col, -1, -1);
-        nn = validMove(turn, row, col, 1, 0);
-        ne = validMove(turn, row, col, 1, 1);
-        ww = validMove(turn, row, col, 0, -1);
-        ee = validMove(turn, row, col, 0, 1);
-        sw = validMove(turn, row, col, 1, -1);
-        ss = validMove(turn, row, col, 1, 0);
-        se = validMove(turn, row, col, 1, 1);
+        nw = validMoveAndResolve(turn, row, col, -1, -1, possible);
+        nn = validMoveAndResolve(turn, row, col, -1, 0, possible);
+        ne = validMoveAndResolve(turn, row, col, 1, 1, possible);
+        ww = validMoveAndResolve(turn, row, col, 0, -1, possible);
+        ee = validMoveAndResolve(turn, row, col, 0, 1, possible);
+        sw = validMoveAndResolve(turn, row, col, 1, -1, possible);
+        ss = validMoveAndResolve(turn, row, col, 1, 0, possible);
+        se = validMoveAndResolve(turn, row, col, 1, 1, possible);
 
         if(nw || nn || ne || ww || ee || sw || ss || se)
             return true;
@@ -74,7 +78,7 @@ public class Board {
             return false;
     }
 
-    public boolean validMove(int turn, int row, int col, int drow, int dcol) {
+    public boolean validMoveAndResolve(int turn, int row, int col, int drow, int dcol, boolean possible) {
 
         boolean firstCheck = true;
         char other;
@@ -107,20 +111,31 @@ public class Board {
                 break;
         }
 
-        if(lastPiece == turn) {
+        if(!possible && lastPiece == turn) {
             for (int i = row + drow, j = col + dcol; i < boardSize || j < boardSize; i += drow, j += dcol) {
                 if(cells[i][j] == other)
                     cells[i][j] = turn;
-
-                if(cells[i][j] == turn)
+                else if(cells[i][j] == turn)
                     break;
             }
             return true;
         }
+        else if(possible && lastPiece == turn)
+            return true;
+        else
+            return false;
+    }
 
+    public void checkNextTurnPossibleMoves(int turn) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if(checkMove(turn, i, j, true))
+                    cells[i][j] = POSSIBLE_MOVE;
+                else if(cells[i][j] == POSSIBLE_MOVE)
+                    cells[i][j] = EMPTY;
+            }
 
-
-        return false;
+        }
     }
 
 }

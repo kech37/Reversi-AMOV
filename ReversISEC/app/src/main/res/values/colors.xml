@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorBackgroundBoardCell">#43d133</color>
+    <color name="colorBackgroundBoardCellPossibleMove">#174612</color>
     <color name="colorBorderBoardCell">#000000</color>
     <color name="colorWhiteBoardCell">#ffffff</color>
     <color name="colorBlackBoardCell">#000000</color>
