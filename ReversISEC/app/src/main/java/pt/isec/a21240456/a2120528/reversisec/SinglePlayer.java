@@ -40,7 +40,6 @@ public class SinglePlayer extends AppCompatActivity {
     private void designGameBoard(){
 
         LinearLayout llGameBoard = findViewById(R.id.gameBoard);
-
         int cellSize = Math.round(getScreenSizeMinusPadding() / maxN);
 
         LinearLayout.LayoutParams llRow = new LinearLayout.LayoutParams(cellSize * maxN, cellSize);
@@ -52,13 +51,13 @@ public class SinglePlayer extends AppCompatActivity {
                 ivCells[i][j] = new ImageView(context);
 
                 switch(board.getCell(i, j)) {
-                    case 0:
+                    case ' ':
                         ivCells[i][j].setBackground(drawCells[0]);
                         break;
-                    case 1:
+                    case 'b':
                         ivCells[i][j].setBackground(drawCells[1]);
                         break;
-                    case 2:
+                    case 'w':
                         ivCells[i][j].setBackground(drawCells[2]);
                         break;
                 }
