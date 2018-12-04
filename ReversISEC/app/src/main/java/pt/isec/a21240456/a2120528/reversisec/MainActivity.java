@@ -11,11 +11,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
-    public void onSinlgePlayer(View view){
+    public void onSinglePlayer(View view){
         Intent intent = new Intent(this, PlayGame.class);
         intent.putExtra("mode", PlayGame.SINGLE_PLAYER);
+        startActivity(intent);
+    }
+
+    public void onProfile(View view){
+        Intent intent = new Intent(this, ConfigProfile.class);
         startActivity(intent);
     }
 }

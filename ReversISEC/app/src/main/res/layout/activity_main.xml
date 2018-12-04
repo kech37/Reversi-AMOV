@@ -33,7 +33,7 @@
             android:textSize="28sp"
             android:layout_marginBottom="4dp"
             android:text="@string/single_player"
-            android:onClick="onSinlgePlayer"/>
+            android:onClick="onSinglePlayer"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,8 @@
             android:padding="16dp"
             android:textSize="28sp"
             android:layout_marginBottom="4dp"
-            android:text="@string/profile"/>
+            android:text="@string/profile"
+            android:onClick="onProfile"/>
 
     </LinearLayout>
 </FrameLayout>

@@ -5,4 +5,9 @@
     <string name="profile">Perfil</string>
     <string name="single_player">1 Jogador</string>
     <string name="multiplayer">2 Jogadores</string>
+    <string name="your_player_name">O seu nome de jogador</string>
+    <string name="player_name">Nome de jogador</string>
+    <string name="take_a_picture">Tire uma fotografia</string>
+    <string name="profile_picture_for_player">Foto de perfil do jogador</string>
+    <string name="save_profile">Guardar perfil</string>
 </resources>

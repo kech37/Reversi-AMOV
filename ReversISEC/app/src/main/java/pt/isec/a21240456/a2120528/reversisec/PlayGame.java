@@ -33,7 +33,6 @@ public class PlayGame extends AppCompatActivity {
     private TextView tvPlayerTurn;
 
     private int playerTurn;
-    private char turnColor = 'b';
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

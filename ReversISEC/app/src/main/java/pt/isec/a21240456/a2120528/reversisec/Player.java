@@ -1,6 +1,7 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
 public class Player {
+    public int uid;
     private String name;
     private int color = 1;
     private boolean bot;

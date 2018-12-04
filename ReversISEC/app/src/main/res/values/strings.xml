@@ -4,4 +4,9 @@
     <string name="profile">Profile</string>
     <string name="single_player">Single Player</string>
     <string name="multiplayer">Multiplayer</string>
+    <string name="your_player_name">Your player name</string>
+    <string name="player_name">Player name</string>
+    <string name="take_a_picture">Take a picture</string>
+    <string name="profile_picture_for_player">Profile picture for player</string>
+    <string name="save_profile">Save Profile</string>
 </resources>
