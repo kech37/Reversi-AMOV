@@ -9,4 +9,6 @@
     <string name="take_a_picture">Take a picture</string>
     <string name="profile_picture_for_player">Profile picture for player</string>
     <string name="save_profile">Save Profile</string>
+    <string name="profile_saved_successfully">Profile saved successfully</string>
+    <string name="something_went_wrong_while_saving_the_profile">Something went wrong while saving the profile</string>
 </resources>

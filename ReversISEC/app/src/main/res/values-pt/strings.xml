@@ -10,4 +10,6 @@
     <string name="take_a_picture">Tire uma fotografia</string>
     <string name="profile_picture_for_player">Foto de perfil do jogador</string>
     <string name="save_profile">Guardar perfil</string>
+    <string name="profile_saved_successfully">Perfil guardado com sucesso</string>
+    <string name="something_went_wrong_while_saving_the_profile">Algo correu mal ao guardar o perfil</string>
 </resources>

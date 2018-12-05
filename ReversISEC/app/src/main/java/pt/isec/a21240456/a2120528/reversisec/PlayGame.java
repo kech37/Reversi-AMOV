@@ -2,6 +2,8 @@ package pt.isec.a21240456.a2120528.reversisec;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Random;
 
 public class PlayGame extends AppCompatActivity {
@@ -31,6 +34,7 @@ public class PlayGame extends AppCompatActivity {
     private Board board = new Board();
 
     private TextView tvPlayerTurn;
+    private ImageView ivProfilePicture;
 
     private int playerTurn;
 
@@ -41,13 +45,25 @@ public class PlayGame extends AppCompatActivity {
 
         context = this;
         tvPlayerTurn = (TextView) findViewById(R.id.tvPlayerTurn);
+        ivProfilePicture = (ImageView) findViewById(R.id.ivProfilePicture);
 
         Intent intent = getIntent();
         if(intent != null){
             gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
         }
 
-        players[0] = new Player("Player 1", false);
+        if(getIntent().hasExtra("playername") && getIntent().hasExtra("profilepicturepath")){
+            tvPlayerTurn.setText(getIntent().getStringExtra("playername"));
+            if(!getIntent().getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
+                File imgFile = new File(getIntent().getStringExtra("profilepicturepath"));
+                if(imgFile.exists()){
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    ivProfilePicture.setImageBitmap(bitmap);
+                }
+            }
+        }
+
+        players[0] = new Player(tvPlayerTurn.getText().toString(), false);
         players[1] = new Player("Bot", true);
 
         initBoardGame();
@@ -81,7 +97,7 @@ public class PlayGame extends AppCompatActivity {
 
                 final int x = i;
                 final int y = j;
-                ivCells[i][j].setOnClickListener(new View.OnClickListener() {
+                ivCells[i][j].setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         makeMove(x, y);

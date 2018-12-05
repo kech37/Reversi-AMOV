@@ -30,8 +30,9 @@ public class ConfigProfile extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private ImageView ivProfilePicture;
-    Bitmap profileBitmap;
+    private Bitmap profileBitmap;
     private EditText etPlayerName;
+    private boolean changedPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,20 @@ public class ConfigProfile extends AppCompatActivity {
         ivProfilePicture = findViewById(R.id.ivProfile);
         etPlayerName = findViewById(R.id.etPlayerName);
 
-        File file = new File(getApplicationContext().getFilesDir().toString() + "/configs");
+        changedPicture = false;
+
+        if(getIntent().hasExtra("playername") && getIntent().hasExtra("profilepicturepath")){
+            etPlayerName.setText(getIntent().getStringExtra("playername"));
+            if(!getIntent().getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
+                File imgFile = new File(getIntent().getStringExtra("profilepicturepath"));
+                if(imgFile.exists()){
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    ivProfilePicture.setImageBitmap(bitmap);
+                }
+            }
+        }
+
+        /*File file = new File(getApplicationContext().getFilesDir().toString() + "/configs");
         if(file.exists()){
             try{
                 InputStream in = new FileInputStream(file);
@@ -64,7 +78,7 @@ public class ConfigProfile extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override
@@ -79,27 +93,38 @@ public class ConfigProfile extends AppCompatActivity {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            changedPicture = true;
         }
     }
 
     public void onSaveProfile(View view){
         try {
-            File picture = new File(getApplicationContext().getFilesDir(), "profilePicture.png");
-
-            OutputStream stream = new FileOutputStream(picture);
-            profileBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-            stream.flush();
-            stream.close();
-
+            OutputStream stream;
+            String picturePath;
+            if(changedPicture){
+                File picture = new File(getApplicationContext().getFilesDir(), "profilePicture.png");
+                stream = new FileOutputStream(picture);
+                profileBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                picturePath = picture.getAbsolutePath();
+                stream.flush();
+                stream.close();
+            }else if(getIntent().hasExtra("profilepicturepath")){
+                picturePath = getIntent().getStringExtra("profilepicturepath");
+            }else{
+                picturePath = "<none>";
+            }
             File configFile = new File(getApplicationContext().getFilesDir(), "configs");
             stream = new FileOutputStream(configFile);
-            stream.write((etPlayerName.getText().toString() + ";" + picture.getAbsolutePath()).getBytes());
+            stream.write((etPlayerName.getText().toString() + ";" + picturePath).getBytes());
             stream.flush();
             stream.close();
+            Toast.makeText(getApplicationContext(), getResources().getText(R.string.profile_saved_successfully) + "!", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getResources().getText(R.string.something_went_wrong_while_saving_the_profile) + "!", Toast.LENGTH_SHORT).show();
         }
+        finish();
+        //this.onBackPressed();
     }
 }
