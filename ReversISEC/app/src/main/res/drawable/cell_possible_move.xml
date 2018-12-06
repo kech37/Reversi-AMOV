@@ -3,17 +3,8 @@
     <item>
         <shape android:shape="rectangle"
             xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/colorBackgroundBoardCell"></solid>
+            <solid android:color="@color/colorBackgroundBoardCellPossibleMove"></solid>
             <stroke  android:width="1dp" android:color="@color/colorBorderBoardCell" />
-        </shape>
-    </item>
-    <item
-        android:top="10dp"
-        android:bottom="10dp"
-        android:left="10dp"
-        android:right="10dp">
-        <shape android:shape="oval">
-            <solid android:color="@color/colorPossibleCell"></solid>
         </shape>
     </item>
 </layer-list>

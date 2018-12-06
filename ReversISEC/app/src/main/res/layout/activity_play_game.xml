@@ -27,7 +27,7 @@
             android:id="@+id/tvPlayerTurn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@string/empty_textview"
             android:textAlignment="center"
             android:textSize="24sp"
             android:layout_weight="2"
@@ -48,19 +48,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnPlayAgain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Jogar Novamente"
-            android:background="@color/colorPrimary"/>
+            android:text="@string/play_again"/>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnSkipTurn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Passar a vez" />
+            android:text="@string/skip_turn" />
     </LinearLayout>
 
 </LinearLayout>

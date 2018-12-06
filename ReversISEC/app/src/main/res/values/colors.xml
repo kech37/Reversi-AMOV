@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBackgroundBoardCell">#43d133</color>
-    <color name="colorBackgroundBoardCellPossibleMove">#174612</color>
+    <color name="colorBackgroundBoardCell">#67cbfc</color>
+    <color name="colorBackgroundBoardCellPossibleMove">#4588a9</color>
     <color name="colorBorderBoardCell">#000000</color>
     <color name="colorWhiteBoardCell">#ffffff</color>
     <color name="colorBlackBoardCell">#000000</color>
-    <color name="colorPossibleCell">#9b9b9b</color>
 
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#32a8e2</color>
+    <color name="colorPrimaryDark">#2379a4</color>
+    <color name="colorAccent">#ff4c41</color>
+
+    <color name="colorWin">#a7f2c0</color>
+    <color name="colorWinFill">#38a85b</color>
+    <color name="colorGreen">#216f39</color>
+
+    <color name="colorLose">#ff4c41</color>
+    <color name="colorLoseFill">#ffffff</color>
+    <color name="colorRed">#8a2622</color>
+
+    <color name="colorInputDialog">#32a8e2</color>
+    <color name="colorFillInputDialog">#2379a4</color>
+    <color name="colorTextInputDialog">#e6e9ea</color>
 </resources>

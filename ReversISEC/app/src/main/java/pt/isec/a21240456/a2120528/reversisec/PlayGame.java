@@ -64,7 +64,18 @@ public class PlayGame extends AppCompatActivity {
         }
 
         players[0] = new Player(tvPlayerTurn.getText().toString(), false);
-        players[1] = new Player("Bot", true);
+
+        switch (gameMode){
+            case SINGLE_PLAYER:
+                players[1] = new Player("Bot", true);
+                break;
+            case LOCAL_MULTYPLAYER:
+                players[1] = new Player(intent.getStringExtra("player2Name"), false);
+                break;
+            case NETWORK_MULTYPLAYER:
+                players[1] = new Player("Receber INFO", false);
+                break;
+        }
 
         initBoardGame();
         drawBoard();
@@ -73,9 +84,16 @@ public class PlayGame extends AppCompatActivity {
 
     private void initGame() {
         Random random = new Random();
-        playerTurn = random.nextInt(1);
-        players[playerTurn].setColor(0);
-        tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
+        if((random.nextInt(100) + 1) <= 50){
+            playerTurn = 0;
+            players[0].setColor(Board.BLACK);
+            players[1].setColor(Board.WHITE);
+        }else{
+            playerTurn = 1;
+            players[0].setColor(Board.WHITE);
+            players[1].setColor(Board.BLACK);
+        }
+        tvPlayerTurn.setText(players[playerTurn].getName());
     }
 
     private void initBoardGame() {

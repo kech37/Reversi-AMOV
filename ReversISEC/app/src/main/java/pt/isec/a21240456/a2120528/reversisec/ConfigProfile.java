@@ -1,11 +1,14 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +36,9 @@ public class ConfigProfile extends AppCompatActivity {
     private Bitmap profileBitmap;
     private EditText etPlayerName;
     private boolean changedPicture;
+
+    private Dialog dialog;
+    private ImageView ivClosePopupCopyright;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,8 @@ public class ConfigProfile extends AppCompatActivity {
                 e.printStackTrace();
             }
         }*/
+
+        dialog = new Dialog(this);
     }
 
     @Override
@@ -125,6 +133,20 @@ public class ConfigProfile extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getResources().getText(R.string.something_went_wrong_while_saving_the_profile) + "!", Toast.LENGTH_SHORT).show();
         }
         finish();
-        //this.onBackPressed();
+    }
+
+    public void onCopyright(View view){
+        dialog.setContentView(R.layout.dialog_credits);
+        ivClosePopupCopyright = (ImageView) dialog.findViewById(R.id.ivClosePopupCopyright);
+
+        ivClosePopupCopyright.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 }

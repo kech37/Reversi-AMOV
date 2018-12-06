@@ -12,4 +12,18 @@
     <string name="save_profile">Guardar perfil</string>
     <string name="profile_saved_successfully">Perfil guardado com sucesso</string>
     <string name="something_went_wrong_while_saving_the_profile">Algo correu mal ao guardar o perfil</string>
+    <string name="empty_textview">TextView Vazia</string>
+    <string name="skip_turn">Passar a vez</string>
+    <string name="play_again">Jogar novamente</string>
+    <string name="winning_message">Parabéns! Ganhaste o jogo com</string>
+    <string name="pieces">peças</string>
+    <string name="yessss">BOAAA</string>
+    <string name="heart_image">Imagem de um corção</string>
+    <string name="awww_snap">Ohhh... Bolas!</string>
+    <string name="losing_message">Parece que perdeste o jogo. Conseguiste reun</string>
+    <string name="try_again">Tenta de novo</string>
+    <string name="losing_image">Imagem de derrota</string>
+    <string name="player_2_name">Nome jogador 2</string>
+    <string name="close_button">Botão de fechar</string>
+    <string name="network">Em rede</string>
 </resources>

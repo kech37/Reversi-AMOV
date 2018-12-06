@@ -1,11 +1,15 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
+import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,10 +19,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
+    private Dialog dialog;
+    private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer;
+    private EditText etInputText;
+    private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer;
+    private String player2Name;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dialog = new Dialog(this);
     }
 
     public void onSinglePlayer(View view){
@@ -26,6 +39,69 @@ public class MainActivity extends AppCompatActivity {
         checkConfigFile(intent);
         intent.putExtra("mode", PlayGame.SINGLE_PLAYER);
         startActivity(intent);
+    }
+
+    public void onMultiplayer(View view){
+        dialog.setContentView(R.layout.dialog_choose_multiplayer);
+        ivClosePopupLoseMultiplayer = (ImageView) dialog.findViewById(R.id.ivClosePopupLoseMultiplayer);
+        ivClosePopupLoseMultiplayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        btnLocalMultiplayer  = (Button) dialog.findViewById(R.id.btnLocalMultiplayer);
+        btnLocalMultiplayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                showPlayername2Input();
+            }
+        });
+        btnNetworkMultiplayer = (Button) dialog.findViewById(R.id.btnNetworkMultiplayer);
+        btnNetworkMultiplayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), PlayGame.class);
+                checkConfigFile(intent);
+                intent.putExtra("mode", PlayGame.NETWORK_MULTYPLAYER);
+                startActivity(intent);
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void showPlayername2Input(){
+        dialog.setContentView(R.layout.dialog_input_playername);
+        ivClosePopupLose = (ImageView) dialog.findViewById(R.id.ivClosePopupLose);
+        dialogOkbtn = (Button) dialog.findViewById(R.id.dialogOkbtn);
+        etInputText = (EditText)  dialog.findViewById(R.id.etInputText);
+
+        ivClosePopupLose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialogOkbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                player2Name = etInputText.getText().toString();
+                dialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), PlayGame.class);
+                checkConfigFile(intent);
+                intent.putExtra("mode", PlayGame.LOCAL_MULTYPLAYER);
+                intent.putExtra("player2Name", player2Name);
+                startActivity(intent);
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     public void onProfile(View view){

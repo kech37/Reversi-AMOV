@@ -11,4 +11,21 @@
     <string name="save_profile">Save Profile</string>
     <string name="profile_saved_successfully">Profile saved successfully</string>
     <string name="something_went_wrong_while_saving_the_profile">Something went wrong while saving the profile</string>
+    <string name="empty_textview">Empty TextView</string>
+    <string name="skip_turn">Skip turn</string>
+    <string name="play_again">Play again</string>
+    <string name="like_a_boss" translatable="false">Like a boss</string>
+    <string name="pieces">pieces</string>
+    <string name="yessss">YESSSS</string>
+    <string name="heart_image">Heart image</string>
+    <string name="awww_snap">Awww... Snap!</string>
+    <string name="losing_message">You have failed to win the game. Your loss was with</string>
+    <string name="try_again">Try again</string>
+    <string name="winning_message">Congratulations! You won the game with</string>
+    <string name="losing_image">Losing image</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="player_2_name">Player 2 name</string>
+    <string name="close_button">Close button</string>
+    <string name="local">Local</string>
+    <string name="network">Network</string>
 </resources>

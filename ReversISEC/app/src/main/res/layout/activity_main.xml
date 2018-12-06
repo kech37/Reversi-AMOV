@@ -5,16 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#ffffd8"
+    android:background="@color/colorTextInputDialog"
     android:padding="16dp">
 
     <TextView
         android:textSize="32sp"
-        android:typeface="serif"
         android:textStyle="bold"
-        android:padding="16dp"
-        android:background="#a0a0a0"
-        android:textColor="#ffffff"
+        android:paddingRight="24dp"
+        android:paddingLeft="24dp"
+        android:paddingTop="64dp"
+        android:background="@drawable/background_main_activity"
+        android:textColor="#FFFFFF"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -24,29 +25,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="bottom"
+        android:paddingBottom="49dp">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
+            android:layout_marginVertical="15dp"
             android:textSize="28sp"
             android:layout_marginBottom="4dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_input"
             android:text="@string/single_player"
             android:onClick="onSinglePlayer"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
+            android:layout_marginVertical="15dp"
             android:textSize="28sp"
             android:layout_marginBottom="4dp"
-            android:text="@string/multiplayer"/>
+            android:textColor="#ffffff"
+            android:background="@drawable/button_input"
+            android:text="@string/multiplayer"
+            android:onClick="onMultiplayer"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
+            android:layout_marginVertical="15dp"
             android:textSize="28sp"
             android:layout_marginBottom="4dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_input"
             android:text="@string/profile"
             android:onClick="onProfile"/>
 
