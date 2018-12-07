@@ -7,7 +7,7 @@
     android:layout_margin="5dp">
 
     <ImageView
-        android:id="@+id/ivClosePopupCopyright"
+        android:id="@+id/ivClosePopupConnectionType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_close_black_24dp"
@@ -40,19 +40,38 @@
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:textColor="@color/colorLoseFill"
-                android:text="@string/app_done_by"/>
+                android:text="@string/connection"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/colorLoseFill"
-                android:textSize="18sp"
-                android:textAlignment="center"
-                android:text="\nCarlos Pinho - 21220528\nRicardo Reis - 21240456\n\nArquitéturas Móveis ISEC 18/19" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                style="?android:attr/buttonBarStyle">
 
+                <Button
+                    android:id="@+id/btnCreateServer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:background="@drawable/button_input"
+                    android:textColor="@color/colorLoseFill"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/create_server" />
+
+
+                <Button
+                    android:id="@+id/btnJoinServer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:background="@drawable/button_input"
+                    android:textColor="@color/colorLoseFill"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/join_server" />
+            </LinearLayout>
 
         </LinearLayout>
 

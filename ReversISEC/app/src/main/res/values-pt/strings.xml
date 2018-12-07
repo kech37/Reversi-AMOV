@@ -26,4 +26,10 @@
     <string name="player_2_name">Nome jogador 2</string>
     <string name="close_button">Botão de fechar</string>
     <string name="network">Em rede</string>
+    <string name="app_done_by">Aplicação feita por</string>
+    <string name="connection">Conecção</string>
+    <string name="create_server">Criar servidor</string>
+    <string name="join_server">Ligar a servidor</string>
+    <string name="server_ip">IP do servidor</string>
+    <string name="connect">Conectar</string>
 </resources>

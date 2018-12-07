@@ -7,7 +7,7 @@
     android:layout_margin="5dp">
 
     <ImageView
-        android:id="@+id/ivClosePopupCopyright"
+        android:id="@+id/ivClosePopupServerIP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_close_black_24dp"
@@ -40,19 +40,39 @@
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:textColor="@color/colorLoseFill"
-                android:text="@string/app_done_by"/>
+                android:text="@string/server_ip"/>
 
-            <TextView
+            <EditText
+                android:id="@+id/etServerIP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/colorLoseFill"
-                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/text_input"
+                android:inputType="textPersonName"
+                android:lines="1"
+                android:maxEms="25"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:text="@string/server_ip"
+                android:textColor="@color/colorFillInputDialog"
+                android:textSize="24sp"
                 android:textAlignment="center"
-                android:text="\nCarlos Pinho - 21220528\nRicardo Reis - 21240456\n\nArquitéturas Móveis ISEC 18/19" />
+                android:importantForAutofill="no" tools:targetApi="o" />
 
+            <Button
+                android:id="@+id/btnConnect"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_input"
+                android:textColor="@color/colorLoseFill"
+                android:text="@string/connect"/>
 
         </LinearLayout>
 

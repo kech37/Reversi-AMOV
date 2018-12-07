@@ -26,6 +26,12 @@
     <string name="ok" translatable="false">Ok</string>
     <string name="player_2_name">Player 2 name</string>
     <string name="close_button">Close button</string>
-    <string name="local">Local</string>
+    <string name="local" translatable="false">Local</string>
     <string name="network">Network</string>
+    <string name="app_done_by">App done by</string>
+    <string name="connection">Connection</string>
+    <string name="create_server">Create Server</string>
+    <string name="join_server">Join Server</string>
+    <string name="server_ip">Server IP</string>
+    <string name="connect">Connect</string>
 </resources>

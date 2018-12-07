@@ -61,31 +61,6 @@ public class ConfigProfile extends AppCompatActivity {
             }
         }
 
-        /*File file = new File(getApplicationContext().getFilesDir().toString() + "/configs");
-        if(file.exists()){
-            try{
-                InputStream in = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                String[] temp = out.toString().split(";");
-                etPlayerName.setText(temp[0]);
-
-                File imgFile = new File(temp[1]);
-                if(imgFile.exists()){
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    ivProfilePicture.setImageBitmap(bitmap);
-                }
-                in.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
-
         dialog = new Dialog(this);
     }
 

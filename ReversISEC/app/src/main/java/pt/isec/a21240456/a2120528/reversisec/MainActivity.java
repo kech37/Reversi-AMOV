@@ -20,9 +20,9 @@ import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
     private Dialog dialog;
-    private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer;
+    private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer, btnCreateServer, btnJoinServer;
     private EditText etInputText;
-    private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer;
+    private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer, ivClosePopupConnectionType;
     private String player2Name;
 
 
@@ -63,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Intent intent = new Intent(getApplicationContext(), PlayGame.class);
-                checkConfigFile(intent);
-                intent.putExtra("mode", PlayGame.NETWORK_MULTYPLAYER);
-                startActivity(intent);
+                showConnectionType();
             }
         });
 
@@ -102,6 +99,44 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+    }
+
+    private void showConnectionType(){
+        dialog.setContentView(R.layout.dialog_choose_server_client);
+        ivClosePopupConnectionType = (ImageView) dialog.findViewById(R.id.ivClosePopupConnectionType);
+        ivClosePopupConnectionType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        btnCreateServer  = (Button) dialog.findViewById(R.id.btnCreateServer);
+        btnCreateServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                multiplayerActivityCreate(true);
+            }
+        });
+        btnJoinServer = (Button) dialog.findViewById(R.id.btnJoinServer);
+        btnJoinServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                multiplayerActivityCreate(false);
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void multiplayerActivityCreate(boolean createServer){
+        Intent intent = new Intent(getApplicationContext(), PlayGame.class);
+        checkConfigFile(intent);
+        intent.putExtra("mode", PlayGame.NETWORK_MULTYPLAYER);
+        intent.putExtra("createServer", createServer);
+        startActivity(intent);
     }
 
     public void onProfile(View view){

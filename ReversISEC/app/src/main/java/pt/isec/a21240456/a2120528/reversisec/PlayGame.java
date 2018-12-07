@@ -1,15 +1,22 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,9 +41,15 @@ public class PlayGame extends AppCompatActivity {
     private Board board = new Board();
 
     private TextView tvPlayerTurn;
-    private ImageView ivProfilePicture;
+    private ImageView ivProfilePicture, ivClosePopupServerIP;
+    private Dialog dialog;
+    private EditText etServerIP;
+    private Button btnConnect, btnTryAgain, btnYesss;
 
     private int playerTurn;
+    private String serverIP;
+
+    private Bitmap defaultImagebitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +60,8 @@ public class PlayGame extends AppCompatActivity {
         tvPlayerTurn = (TextView) findViewById(R.id.tvPlayerTurn);
         ivProfilePicture = (ImageView) findViewById(R.id.ivProfilePicture);
 
+        dialog = new Dialog(this);
+
         Intent intent = getIntent();
         if(intent != null){
             gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
@@ -56,30 +71,71 @@ public class PlayGame extends AppCompatActivity {
             tvPlayerTurn.setText(getIntent().getStringExtra("playername"));
             if(!getIntent().getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
                 File imgFile = new File(getIntent().getStringExtra("profilepicturepath"));
+                defaultImagebitmap = drawableToBitmap(getDrawable(R.drawable.ic_person_black_208dp));
                 if(imgFile.exists()){
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    ivProfilePicture.setImageBitmap(bitmap);
+                    players[0] = new Player(tvPlayerTurn.getText().toString(), BitmapFactory.decodeFile(imgFile.getAbsolutePath()), false);
+                }else{
+                    players[0] = new Player(tvPlayerTurn.getText().toString(), defaultImagebitmap, false);
                 }
             }
         }
 
-        players[0] = new Player(tvPlayerTurn.getText().toString(), false);
+
 
         switch (gameMode){
             case SINGLE_PLAYER:
-                players[1] = new Player("Bot", true);
+                players[1] = new Player("Bot", defaultImagebitmap, true);
                 break;
             case LOCAL_MULTYPLAYER:
-                players[1] = new Player(intent.getStringExtra("player2Name"), false);
+                players[1] = new Player(intent.getStringExtra("player2Name"), defaultImagebitmap, false);
                 break;
             case NETWORK_MULTYPLAYER:
-                players[1] = new Player("Receber INFO", false);
+                if(getIntent().getBooleanExtra("createServer", true)){
+                    //TODO Cria server para outro jogador se conectar - (Verificar o exemplo do professor do pedra, papel e tesoura
+                }else{
+                    //TODO Junta-se a um servidor
+
+                    // Chama uma dialog para o utilizador inserir o IP
+                    // que se deve conectar (como no exemplo do
+                    // professor do pedra, papel e tesoura).
+                    // o IP é guardado em serverIP
+                    showServerIPInput();
+                }
+
+                //TODO tem que receber a informação do jogador adversario de modo a apresentar no ecrã de jogo
+                players[1] = new Player("Receber INFO", defaultImagebitmap, false);
                 break;
         }
 
         initBoardGame();
         drawBoard();
         initGame();
+    }
+
+    private void showServerIPInput(){
+        dialog.setContentView(R.layout.dialog_input_server_ip);
+        ivClosePopupServerIP = (ImageView) dialog.findViewById(R.id.ivClosePopupServerIP);
+        btnConnect = (Button) dialog.findViewById(R.id.btnConnect);
+        etServerIP = (EditText)  dialog.findViewById(R.id.etServerIP);
+
+        ivClosePopupServerIP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                serverIP = etServerIP.getText().toString();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     private void initGame() {
@@ -93,6 +149,7 @@ public class PlayGame extends AppCompatActivity {
             players[0].setColor(Board.WHITE);
             players[1].setColor(Board.BLACK);
         }
+        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
         tvPlayerTurn.setText(players[playerTurn].getName());
     }
 
@@ -160,14 +217,75 @@ public class PlayGame extends AppCompatActivity {
     private void makeMove(int x, int y){
         switch (gameMode){
             case SINGLE_PLAYER:
+            case LOCAL_MULTYPLAYER:
+                    board.makeMove(x, y);
+                    if(playerTurn == 1){
+                        playerTurn = 0;
+                    }else{
+                        playerTurn = 1;
+                    }
                     if(players[playerTurn].isBot()){
                         //TODO: Bot logic
                     }
-                    board.makeMove(x, y);
-                    tvPlayerTurn.setText(players[playerTurn].getName() + " (" + players[playerTurn].getColor() + ")");
+                    tvPlayerTurn.setText(players[playerTurn].getName());
+                    ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
                     drawBoard();
                 break;
         }
 
+    }
+
+    public Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public void onWin(View view) {
+        dialog.setContentView(R.layout.dialog_player_win);
+        btnYesss = (Button) dialog.findViewById(R.id.btnYesss);
+
+        btnYesss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    public void onLose(View view) {
+        dialog.setContentView(R.layout.dialog_player_lose);
+        btnTryAgain = (Button) dialog.findViewById(R.id.btnTryAgain);
+
+        btnTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 }
