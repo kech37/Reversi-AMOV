@@ -12,9 +12,13 @@ public class Board {
     static final int BLACK = 2;
     static final int POSSIBLE_MOVE = 3;
 
+    static final int USER_MOVE = 0;
+    static final int DRAW_POSSIBLE_MOVES = 1;
+    static final int BOT_DECISION = 2;
+
     private final int boardSize = 8;
     private int[][] cells = new int[boardSize][boardSize];
-    int turn = BLACK;
+    int maxRow, maxCol, maxCounter, maxPieces;
 
     public Board() {
         newGame();
@@ -29,16 +33,16 @@ public class Board {
         addPiece(BLACK, 4, 3);
         addPiece(WHITE, 4, 4);
 
-        checkNextTurnPossibleMoves(turn);
+        checkNextTurnPossibleMoves(BLACK);
     }
 
     public int getCell(int i, int j) {
         return cells[i][j];
     }
 
-    public boolean makeMove(int row, int col) {
+    public boolean makeMove(int turn, int row, int col) {
 
-        if(checkMove(turn, row, col, false)) {
+        if(checkMove(turn, row, col, USER_MOVE)) {
             addPiece(turn, row, col);
             if(turn == BLACK)
                 turn = WHITE;
@@ -57,20 +61,20 @@ public class Board {
         cells[row][col] = turn;
     }
 
-    public boolean checkMove(int turn, int row, int col, boolean possible) {
+    public boolean checkMove(int turn, int row, int col, int resolve) {
         boolean nw, nn, ne, ww, ee, sw, ss, se;
 
         if(cells[row][col] != EMPTY && cells[row][col] != POSSIBLE_MOVE)
             return false;
 
-        nw = validMoveAndResolve(turn, row, col, -1, -1, possible);
-        nn = validMoveAndResolve(turn, row, col, -1, 0, possible);
-        ne = validMoveAndResolve(turn, row, col, 1, 1, possible);
-        ww = validMoveAndResolve(turn, row, col, 0, -1, possible);
-        ee = validMoveAndResolve(turn, row, col, 0, 1, possible);
-        sw = validMoveAndResolve(turn, row, col, 1, -1, possible);
-        ss = validMoveAndResolve(turn, row, col, 1, 0, possible);
-        se = validMoveAndResolve(turn, row, col, 1, 1, possible);
+        nw = validMoveAndResolve(turn, row, col, -1, -1, resolve);
+        nn = validMoveAndResolve(turn, row, col, -1, 0, resolve);
+        ne = validMoveAndResolve(turn, row, col, 1, 1, resolve);
+        ww = validMoveAndResolve(turn, row, col, 0, -1, resolve);
+        ee = validMoveAndResolve(turn, row, col, 0, 1, resolve);
+        sw = validMoveAndResolve(turn, row, col, 1, -1, resolve);
+        ss = validMoveAndResolve(turn, row, col, 1, 0, resolve);
+        se = validMoveAndResolve(turn, row, col, 1, 1, resolve);
 
         if(nw || nn || ne || ww || ee || sw || ss || se)
             return true;
@@ -78,7 +82,7 @@ public class Board {
             return false;
     }
 
-    public boolean validMoveAndResolve(int turn, int row, int col, int drow, int dcol, boolean possible) {
+    public boolean validMoveAndResolve(int turn, int row, int col, int drow, int dcol, int resolve) {
 
         boolean firstCheck = true;
         char other;
@@ -99,6 +103,9 @@ public class Board {
             return false;
 
         for(int i = row + drow, j=col + dcol; i<boardSize || j<boardSize; i+=drow, j+=dcol) {
+            if(i < 0 || i > 7 || j < 0 || j > 7)
+                return false;
+
             if(cells[i][j] == other) {
                 firstCheck = false;
                 continue;
@@ -111,7 +118,7 @@ public class Board {
                 break;
         }
 
-        if(!possible && lastPiece == turn) {
+        if(resolve == USER_MOVE && lastPiece == turn) {
             for (int i = row + drow, j = col + dcol; i < boardSize || j < boardSize; i += drow, j += dcol) {
                 if(cells[i][j] == other)
                     cells[i][j] = turn;
@@ -120,8 +127,23 @@ public class Board {
             }
             return true;
         }
-        else if(possible && lastPiece == turn)
+        else if(resolve == DRAW_POSSIBLE_MOVES && lastPiece == turn)
             return true;
+        else if(resolve == BOT_DECISION && lastPiece == turn) {
+            maxCounter = 0;
+            for (int i = row + drow, j = col + dcol; i < boardSize || j < boardSize; i += drow, j += dcol) {
+                if(cells[i][j] == other)
+                    maxCounter ++;
+                else if(cells[i][j] == turn)
+                    break;
+            }
+            if(maxCounter > maxPieces) {
+                maxRow = row;
+                maxCol = col;
+                maxPieces = maxCounter;
+            }
+            return true;
+        }
         else
             return false;
     }
@@ -129,13 +151,48 @@ public class Board {
     public void checkNextTurnPossibleMoves(int turn) {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if(checkMove(turn, i, j, true))
+                if(checkMove(turn, i, j, DRAW_POSSIBLE_MOVES))
                     cells[i][j] = POSSIBLE_MOVE;
                 else if(cells[i][j] == POSSIBLE_MOVE)
                     cells[i][j] = EMPTY;
             }
 
         }
+    }
+
+    public int getPieces(int color) {
+        int count = 0;
+
+        for (int i = 0; i < boardSize ; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if(cells[i][j] == color) {
+                    count ++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public boolean intelligentBotMove(int turn) {
+
+        maxRow = 8;
+        maxCol = 8;
+        maxPieces = 0;
+
+        for (int i = 0; i < boardSize ; i++) {
+            for (int j = 0; j < boardSize; j++) {
+
+                if(cells[i][j] == POSSIBLE_MOVE) {
+                    checkMove(turn, i, j, BOT_DECISION);
+                }
+            }
+        }
+
+        if(maxRow >= 0 && maxRow < 8 && maxCol >= 0 && maxRow < 8) {
+            return makeMove(turn, maxRow, maxCol);
+        }
+        else
+            return false;
     }
 
 }

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class PlayGame extends AppCompatActivity {
     private Button btnConnect, btnTryAgain, btnYesss;
 
     private int playerTurn;
+
     private String serverIP;
 
     private Bitmap defaultImagebitmap;
@@ -67,9 +69,10 @@ public class PlayGame extends AppCompatActivity {
             gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
         }
 
-        if(getIntent().hasExtra("playername") && getIntent().hasExtra("profilepicturepath")){
+        /*TODO Resolve profile bugs
+        if(!getIntent().hasExtra("playername") && getIntent().hasExtra("profilepicturepath")){
             tvPlayerTurn.setText(getIntent().getStringExtra("playername"));
-            if(!getIntent().getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
+            if(getIntent().getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
                 File imgFile = new File(getIntent().getStringExtra("profilepicturepath"));
                 defaultImagebitmap = drawableToBitmap(getDrawable(R.drawable.ic_person_black_208dp));
                 if(imgFile.exists()){
@@ -78,13 +81,17 @@ public class PlayGame extends AppCompatActivity {
                     players[0] = new Player(tvPlayerTurn.getText().toString(), defaultImagebitmap, false);
                 }
             }
-        }
+        }*/
+
+        players[0] = new Player("Reis", defaultImagebitmap, false);
 
 
 
         switch (gameMode){
             case SINGLE_PLAYER:
                 players[1] = new Player("Bot", defaultImagebitmap, true);
+                tvPlayerTurn.setText(players[0].getName());
+                ivProfilePicture.setImageBitmap(players[0].getImage());
                 break;
             case LOCAL_MULTYPLAYER:
                 players[1] = new Player(intent.getStringExtra("player2Name"), defaultImagebitmap, false);
@@ -110,6 +117,7 @@ public class PlayGame extends AppCompatActivity {
         initBoardGame();
         drawBoard();
         initGame();
+
     }
 
     private void showServerIPInput(){
@@ -148,6 +156,10 @@ public class PlayGame extends AppCompatActivity {
             playerTurn = 1;
             players[0].setColor(Board.WHITE);
             players[1].setColor(Board.BLACK);
+            if(gameMode == SINGLE_PLAYER) {
+                board.intelligentBotMove(Board.BLACK);
+                drawBoard();
+            }
         }
         ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
         tvPlayerTurn.setText(players[playerTurn].getName());
@@ -217,19 +229,47 @@ public class PlayGame extends AppCompatActivity {
     private void makeMove(int x, int y){
         switch (gameMode){
             case SINGLE_PLAYER:
-            case LOCAL_MULTYPLAYER:
-                    board.makeMove(x, y);
-                    if(playerTurn == 1){
-                        playerTurn = 0;
-                    }else{
-                        playerTurn = 1;
+                if(players[0].getPlayAgainCard() == Player.IN_USE) {
+                    if(board.makeMove(players[0].getColor(), x, y)) {
+                        players[0].setPlayAgainCard(Player.ALREADY_USED);
+                        drawBoard();
                     }
-                    if(players[playerTurn].isBot()){
-                        //TODO: Bot logic
-                    }
-                    tvPlayerTurn.setText(players[playerTurn].getName());
-                    ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+                }
+                else if(players[0].getSkipAgainCard() == Player.IN_USE) {
+                    board.intelligentBotMove(players[1].getColor());
+                    players[0].setSkipAgainCard(Player.ALREADY_USED);
                     drawBoard();
+                }
+                else if(board.makeMove(players[0].getColor(), x, y)) {
+                    board.intelligentBotMove(players[1].getColor());
+                    drawBoard();
+                }
+                break;
+            case LOCAL_MULTYPLAYER:
+                if(!players[0].isBot() && !players[1].isBot()) {
+                    if(board.makeMove(players[playerTurn].getColor(), x, y)) {
+                        playerTurn = (playerTurn + 1) % 2;
+                        tvPlayerTurn.setText(players[playerTurn].getName());
+                        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+                        drawBoard();
+                    }
+                }
+                else if(players[0].isBot()) {
+                    if(board.makeMove(players[1].getColor(), x, y)) {
+                        board.intelligentBotMove(players[0].getColor());
+                        tvPlayerTurn.setText(players[playerTurn].getName());
+                        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+                        drawBoard();
+                    }
+                }
+                else if(players[1].isBot()) {
+                    if(board.makeMove(players[0].getColor(), x, y)) {
+                        board.intelligentBotMove(players[1].getColor());
+                        tvPlayerTurn.setText(players[playerTurn].getName());
+                        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+                        drawBoard();
+                    }
+                }
                 break;
         }
 
