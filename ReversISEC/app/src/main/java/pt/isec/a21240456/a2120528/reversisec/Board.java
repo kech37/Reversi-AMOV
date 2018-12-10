@@ -148,16 +148,25 @@ public class Board {
             return false;
     }
 
-    public void checkNextTurnPossibleMoves(int turn) {
+    public boolean checkNextTurnPossibleMoves(int turn) {
+        int counter = 0;
+
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if(checkMove(turn, i, j, DRAW_POSSIBLE_MOVES))
+                if(checkMove(turn, i, j, DRAW_POSSIBLE_MOVES)) {
                     cells[i][j] = POSSIBLE_MOVE;
+                    counter++;
+                }
                 else if(cells[i][j] == POSSIBLE_MOVE)
                     cells[i][j] = EMPTY;
             }
 
         }
+
+        if (counter == 0)
+            return false;
+        else
+            return true;
     }
 
     public int getPieces(int color) {

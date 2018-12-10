@@ -311,24 +311,29 @@ public class PlayGame extends AppCompatActivity {
                 if(players[0].getPlayAgainCard() == Player.IN_USE) {
                     if(board.makeMove(players[0].getColor(), x, y)) {
                         players[0].setPlayAgainCard(Player.ALREADY_USED);
-                        board.checkNextTurnPossibleMoves(players[0].getColor());
+                        if(!board.checkNextTurnPossibleMoves(players[0].getColor()))
+                            resolveEndGame();
                         playerTurn = 0;
                         drawBoard();
                     }
                 }
                 else if(board.makeMove(players[0].getColor(), x, y)) {
                     totalTurns++;
-                    board.intelligentBotMove(players[1].getColor());
+                    if (!board.intelligentBotMove(players[1].getColor()))
+                        resolveEndGame();
                     totalTurns++;
                     playerTurn = 0;
+                    if (!board.checkNextTurnPossibleMoves(players[0].getColor()))
+                        resolveEndGame();
                     drawBoard();
                 }
-            break;
+                break;
             case LOCAL_MULTYPLAYER:
                 if(players[playerTurn].getPlayAgainCard() == Player.IN_USE) {
                     if (board.makeMove(players[playerTurn].getColor(), x, y)) {
                         players[playerTurn].setPlayAgainCard(Player.ALREADY_USED);
-                        board.checkNextTurnPossibleMoves(players[playerTurn].getColor());
+                        if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
+                            resolveEndGame();
                         drawBoard();
                     }
                 }
@@ -336,6 +341,8 @@ public class PlayGame extends AppCompatActivity {
                     if (board.makeMove(players[playerTurn].getColor(), x, y)) {
                         totalTurns++;
                         playerTurn = (playerTurn + 1) % 2;
+                        if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
+                            resolveEndGame();
                         drawBoard();
                     }
                 } else if (players[0].isBot()) {
@@ -343,6 +350,8 @@ public class PlayGame extends AppCompatActivity {
                         totalTurns++;
                         board.intelligentBotMove(players[0].getColor());
                         totalTurns++;
+                        if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
+                            resolveEndGame();
                         drawBoard();
                     }
                 } else if (players[1].isBot()) {
@@ -350,10 +359,12 @@ public class PlayGame extends AppCompatActivity {
                         totalTurns++;
                         board.intelligentBotMove(players[1].getColor());
                         totalTurns++;
+                        if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
+                            resolveEndGame();
                         drawBoard();
                     }
                 }
-            break;
+                break;
         }
     }
 
@@ -392,6 +403,7 @@ public class PlayGame extends AppCompatActivity {
         });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //TODO Insert number of pieces
         dialog.show();
     }
 
@@ -408,6 +420,40 @@ public class PlayGame extends AppCompatActivity {
         });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //TODO Insert number of pieces
         dialog.show();
+    }
+
+    public void resolveEndGame() {
+        int winner;
+
+        if(board.getPieces(board.BLACK) == board.getPieces(board.WHITE))
+            winner = 3;
+        else if(board.getPieces(board.BLACK) > board.getPieces(board.WHITE))
+            winner = board.BLACK;
+        else
+            winner = board.WHITE;
+
+        switch (gameMode) {
+            case SINGLE_PLAYER:
+                if (winner == 3) {
+//                    TODO insert tie thingy
+                }
+                else if(players[0].getColor() == winner)
+                    onWin(findViewById(android.R.id.content));
+                else
+                    onLose(findViewById(android.R.id.content));
+                break;
+            case LOCAL_MULTYPLAYER:
+                if (winner == 3) {
+//                    TODO insert tie thingy e maybe dizer quem ganhou em multyplayer local
+                }
+                else if(players[0].getColor() == winner)
+                    onWin(findViewById(android.R.id.content));
+                else
+                    onLose(findViewById(android.R.id.content));
+                break;
+
+        }
     }
 }
