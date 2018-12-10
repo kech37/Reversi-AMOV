@@ -32,4 +32,6 @@
     <string name="join_server">Ligar a servidor</string>
     <string name="server_ip">IP do servidor</string>
     <string name="connect">Conectar</string>
+    <string name="black_pieces">Pretas:</string>
+    <string name="white_pieces">Brancas:</string>
 </resources>

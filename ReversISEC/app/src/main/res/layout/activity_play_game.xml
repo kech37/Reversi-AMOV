@@ -7,6 +7,7 @@
     tools:context=".PlayGame"
     android:orientation="vertical"
     android:padding="16dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,27 +46,50 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="40sp"
+        android:layout_marginBottom="20sp">
 
-        <Button
-            android:id="@+id/btnPlayAgain"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_pressed"
-            android:textColor="@color/colorLoseFill"
+        <TextView
+            android:id="@+id/TextViewBlack"
+            android:layout_width="193dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/play_again"/>
+            android:layout_weight="1"
+            android:text="@string/black_pieces"
+            android:textColor="@color/colorBorderBoardCell"
+            android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/btnSkipTurn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_pressed"
-            android:textColor="@color/colorLoseFill"
+        <TextView
+            android:id="@+id/TextViewBlackPieces"
+            android:layout_width="193dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/skip_turn" />
+            android:layout_weight="1"
+            android:text="0"
+            android:textColor="@color/colorBorderBoardCell"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/TextViewWhite"
+            android:layout_width="193dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="@string/white_pieces"
+            android:textColor="@color/colorBorderBoardCell"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/TextViewWhitePieces"
+            android:layout_width="193dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="0"
+            android:textColor="@color/colorBorderBoardCell"
+            android:textSize="24sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -74,24 +98,24 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/btnPlayAgain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_input"
-            android:textColor="@color/colorLoseFill"
             android:layout_margin="5dp"
-            android:text="Win"
-            android:onClick="onWin"/>
+            android:layout_weight="1"
+            android:background="@drawable/button_pressed"
+            android:text="@string/play_again"
+            android:textColor="@color/colorLoseFill" />
 
         <Button
+            android:id="@+id/btnSkipTurn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_input"
-            android:textColor="@color/colorLoseFill"
             android:layout_margin="5dp"
-            android:text="Lose"
-            android:onClick="onLose"/>
+            android:layout_weight="1"
+            android:background="@drawable/button_pressed"
+            android:text="@string/skip_turn"
+            android:textColor="@color/colorLoseFill" />
     </LinearLayout>
 
 </LinearLayout>

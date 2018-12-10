@@ -41,7 +41,7 @@ public class PlayGame extends AppCompatActivity {
     private Context context;
     private Board board = new Board();
 
-    private TextView tvPlayerTurn;
+    private TextView tvPlayerTurn, mBlackPieces, mWhitePieces;
     private ImageView ivProfilePicture, ivClosePopupServerIP;
     private Dialog dialog;
     private EditText etServerIP;
@@ -297,6 +297,12 @@ public class PlayGame extends AppCompatActivity {
                 }
                 break;
         }
+
+        mBlackPieces = (TextView)findViewById(R.id.TextViewBlackPieces);
+        mBlackPieces.setText(String.valueOf(board.getPieces(board.BLACK)));
+        mWhitePieces = (TextView)findViewById(R.id.TextViewWhitePieces);
+        mWhitePieces.setText(String.valueOf(board.getPieces(board.WHITE)));
+
     }
 
     private void makeMove(int x, int y){
