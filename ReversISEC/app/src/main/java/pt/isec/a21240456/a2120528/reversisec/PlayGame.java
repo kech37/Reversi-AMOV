@@ -45,8 +45,10 @@ public class PlayGame extends AppCompatActivity {
     private ImageView ivProfilePicture, ivClosePopupServerIP;
     private Dialog dialog;
     private EditText etServerIP;
-    private Button btnConnect, btnTryAgain, btnYesss;
+    private Button btnConnect, btnTryAgain, btnYesss, mBtnPlayAgain, mBtnSkipTurn;
 
+    private boolean buttonsActivated;
+    private int totalTurns;
     private int playerTurn;
 
     private String serverIP;
@@ -83,9 +85,9 @@ public class PlayGame extends AppCompatActivity {
             }
         }*/
 
+        buttonsActivated = false;
+        totalTurns = 0;
         players[0] = new Player("Reis", defaultImagebitmap, false);
-
-
 
         switch (gameMode){
             case SINGLE_PLAYER:
@@ -158,6 +160,8 @@ public class PlayGame extends AppCompatActivity {
             players[1].setColor(Board.BLACK);
             if(gameMode == SINGLE_PLAYER) {
                 board.intelligentBotMove(Board.BLACK);
+                totalTurns++;
+                playerTurn = 0;
                 drawBoard();
             }
         }
@@ -188,13 +192,49 @@ public class PlayGame extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         makeMove(x, y);
-                        Toast.makeText(context, "(" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "(" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
                     }
                 });
                 linRow.addView(ivCells[i][j], llCell);
             }
             llGameBoard.addView(linRow, llRow);
         }
+
+        mBtnPlayAgain = (Button)findViewById(R.id.btnPlayAgain);
+        mBtnPlayAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(players[playerTurn].getPlayAgainCard() == Player.NEVER_USED && totalTurns >= 8) {
+                    players[playerTurn].setPlayAgainCard(Player.IN_USE);
+                    drawBoard();
+                }
+            }
+        });
+
+        mBtnSkipTurn = (Button)findViewById((R.id.btnSkipTurn));
+        mBtnSkipTurn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (gameMode) {
+                    case SINGLE_PLAYER:
+                        if (players[0].getSkipAgainCard() == Player.NEVER_USED && totalTurns >= 8) {
+                            board.checkNextTurnPossibleMoves(players[1].getColor());
+                            board.intelligentBotMove(players[1].getColor());
+                            players[0].setSkipAgainCard(Player.ALREADY_USED);
+                            drawBoard();
+                        }
+                         break;
+                    case LOCAL_MULTYPLAYER:
+                        if (players[playerTurn].getSkipAgainCard() == Player.NEVER_USED && totalTurns >= 8) {
+                            players[playerTurn].setSkipAgainCard(Player.ALREADY_USED);
+                            playerTurn = (playerTurn + 1) % 2;
+                            board.checkNextTurnPossibleMoves(players[playerTurn].getColor());
+                            drawBoard();
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     private float getScreenSizeMinusPadding(){
@@ -206,6 +246,10 @@ public class PlayGame extends AppCompatActivity {
     }
 
     private void drawBoard() {
+
+        tvPlayerTurn.setText(players[playerTurn].getName());
+        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+
         for (int i = 0; i < maxN; i++) {
             for (int j = 0; j < maxN; j++) {
                 switch(board.getCell(i, j)) {
@@ -224,6 +268,35 @@ public class PlayGame extends AppCompatActivity {
                 }
             }
         }
+
+        switch (gameMode) {
+            case SINGLE_PLAYER:
+                if(totalTurns >= 8) {
+                    if(players[0].getPlayAgainCard() == Player.NEVER_USED)
+                        mBtnPlayAgain.setBackground(getResources().getDrawable(R.drawable.button_input, null));
+                    else
+                        mBtnPlayAgain.setBackground(getResources().getDrawable(R.drawable.button_pressed, null));
+
+                    if(players[0].getSkipAgainCard() == Player.NEVER_USED)
+                        mBtnSkipTurn.setBackground(getResources().getDrawable(R.drawable.button_input, null));
+                    else
+                        mBtnSkipTurn.setBackground(getResources().getDrawable(R.drawable.button_pressed, null));
+                }
+                break;
+            case LOCAL_MULTYPLAYER:
+                if(totalTurns >= 8) {
+                    if(players[playerTurn].getPlayAgainCard() == Player.NEVER_USED)
+                        mBtnPlayAgain.setBackground(getResources().getDrawable(R.drawable.button_input, null));
+                    else
+                        mBtnPlayAgain.setBackground(getResources().getDrawable(R.drawable.button_pressed, null));
+
+                    if(players[playerTurn].getSkipAgainCard() == Player.NEVER_USED)
+                        mBtnSkipTurn.setBackground(getResources().getDrawable(R.drawable.button_input, null));
+                    else
+                        mBtnSkipTurn.setBackground(getResources().getDrawable(R.drawable.button_pressed, null));
+                }
+                break;
+        }
     }
 
     private void makeMove(int x, int y){
@@ -232,47 +305,50 @@ public class PlayGame extends AppCompatActivity {
                 if(players[0].getPlayAgainCard() == Player.IN_USE) {
                     if(board.makeMove(players[0].getColor(), x, y)) {
                         players[0].setPlayAgainCard(Player.ALREADY_USED);
+                        board.checkNextTurnPossibleMoves(players[0].getColor());
+                        playerTurn = 0;
                         drawBoard();
                     }
-                }
-                else if(players[0].getSkipAgainCard() == Player.IN_USE) {
-                    board.intelligentBotMove(players[1].getColor());
-                    players[0].setSkipAgainCard(Player.ALREADY_USED);
-                    drawBoard();
                 }
                 else if(board.makeMove(players[0].getColor(), x, y)) {
+                    totalTurns++;
                     board.intelligentBotMove(players[1].getColor());
+                    totalTurns++;
+                    playerTurn = 0;
                     drawBoard();
                 }
-                break;
+            break;
             case LOCAL_MULTYPLAYER:
-                if(!players[0].isBot() && !players[1].isBot()) {
-                    if(board.makeMove(players[playerTurn].getColor(), x, y)) {
+                if(players[playerTurn].getPlayAgainCard() == Player.IN_USE) {
+                    if (board.makeMove(players[playerTurn].getColor(), x, y)) {
+                        players[playerTurn].setPlayAgainCard(Player.ALREADY_USED);
+                        board.checkNextTurnPossibleMoves(players[playerTurn].getColor());
+                        drawBoard();
+                    }
+                }
+                else if (!players[0].isBot() && !players[1].isBot()) {
+                    if (board.makeMove(players[playerTurn].getColor(), x, y)) {
+                        totalTurns++;
                         playerTurn = (playerTurn + 1) % 2;
-                        tvPlayerTurn.setText(players[playerTurn].getName());
-                        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
                         drawBoard();
                     }
-                }
-                else if(players[0].isBot()) {
-                    if(board.makeMove(players[1].getColor(), x, y)) {
+                } else if (players[0].isBot()) {
+                    if (board.makeMove(players[1].getColor(), x, y)) {
+                        totalTurns++;
                         board.intelligentBotMove(players[0].getColor());
-                        tvPlayerTurn.setText(players[playerTurn].getName());
-                        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+                        totalTurns++;
                         drawBoard();
                     }
-                }
-                else if(players[1].isBot()) {
-                    if(board.makeMove(players[0].getColor(), x, y)) {
+                } else if (players[1].isBot()) {
+                    if (board.makeMove(players[0].getColor(), x, y)) {
+                        totalTurns++;
                         board.intelligentBotMove(players[1].getColor());
-                        tvPlayerTurn.setText(players[playerTurn].getName());
-                        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+                        totalTurns++;
                         drawBoard();
                     }
                 }
-                break;
+            break;
         }
-
     }
 
     public Bitmap drawableToBitmap (Drawable drawable) {

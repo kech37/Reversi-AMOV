@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_input"
+            android:background="@drawable/button_pressed"
             android:textColor="@color/colorLoseFill"
             android:layout_margin="5dp"
             android:text="@string/play_again"/>
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_input"
+            android:background="@drawable/button_pressed"
             android:textColor="@color/colorLoseFill"
             android:layout_margin="5dp"
             android:text="@string/skip_turn" />

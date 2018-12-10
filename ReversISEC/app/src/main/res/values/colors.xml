@@ -21,4 +21,6 @@
     <color name="colorInputDialog">#32a8e2</color>
     <color name="colorFillInputDialog">#2379a4</color>
     <color name="colorTextInputDialog">#e6e9ea</color>
+
+    <color name="colorButtonPressed">#494c4d</color>
 </resources>
