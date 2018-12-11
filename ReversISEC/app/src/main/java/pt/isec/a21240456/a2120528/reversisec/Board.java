@@ -1,12 +1,13 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 //0 -> empty board
 //1 -> black piece
 //2 -> white piece
 //3 -> possible move
-public class Board {
+public class Board implements Serializable {
     static final int EMPTY = 0;
     static final int WHITE = 1;
     static final int BLACK = 2;

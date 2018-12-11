@@ -2,7 +2,9 @@ package pt.isec.a21240456.a2120528.reversisec;
 
 import android.graphics.Bitmap;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     public static final int ALREADY_USED= 0;
     public static final int IN_USE = 1;
     public static final int NEVER_USED = 2;
