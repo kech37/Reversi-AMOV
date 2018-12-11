@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:paddingRight="24dp"
         android:paddingLeft="24dp"
-        android:paddingTop="64dp"
+        android:paddingTop="32dp"
         android:background="@drawable/background_main_activity"
         android:textColor="#FFFFFF"
         android:layout_gravity="center"
@@ -25,16 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="bottom"
-        android:paddingBottom="49dp">
+        android:layout_gravity="bottom">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:layout_marginVertical="15dp"
             android:textSize="28sp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="16dp"
             android:textColor="#ffffff"
             android:background="@drawable/button_input"
             android:text="@string/single_player"
@@ -43,9 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:layout_marginVertical="15dp"
             android:textSize="28sp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="16dp"
             android:textColor="#ffffff"
             android:background="@drawable/button_input"
             android:text="@string/multiplayer"
@@ -54,13 +51,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:layout_marginVertical="15dp"
             android:textSize="28sp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="16dp"
             android:textColor="#ffffff"
             android:background="@drawable/button_input"
             android:text="@string/profile"
             android:onClick="onProfile"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textSize="28sp"
+            android:layout_marginBottom="32dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_input"
+            android:text="@string/game_history"
+            android:onClick="onOlderGames"/>
 
     </LinearLayout>
 </FrameLayout>

@@ -15,12 +15,12 @@
     <string name="empty_textview">TextView Vazia</string>
     <string name="skip_turn">Passar a vez</string>
     <string name="play_again">Jogar novamente</string>
-    <string name="winning_message">Parabéns! Ganhaste o jogo com</string>
+    <string name="winning_message">Parabéns! Ganhaste o jogo com:</string>
     <string name="pieces">peças</string>
     <string name="yessss">BOAAA</string>
     <string name="heart_image">Imagem de um corção</string>
     <string name="awww_snap">Ohhh... Bolas!</string>
-    <string name="losing_message">Parece que perdeste o jogo. Conseguiste reun</string>
+    <string name="losing_message">Parece que perdeste o jogo. Conseguiste reunir:</string>
     <string name="try_again">Tenta de novo</string>
     <string name="losing_image">Imagem de derrota</string>
     <string name="player_2_name">Nome jogador 2</string>
@@ -32,6 +32,14 @@
     <string name="join_server">Ligar a servidor</string>
     <string name="server_ip">IP do servidor</string>
     <string name="connect">Conectar</string>
-    <string name="black_pieces">Pretas:</string>
-    <string name="white_pieces">Brancas:</string>
+    <string name="black_pieces">Pretas</string>
+    <string name="white_pieces">Brancas</string>
+    <string name="lets_go_again">De novo</string>
+    <string name="it_s_a_tie">É empate!</string>
+    <string name="sad_face_image">Imagem de uma cara triste</string>
+    <string name="maybe_next_time">Na próxima vez consigas</string>
+    <string name="game_history">Histórico de jogos</string>
+    <string name="result_single_player">Contra o computador</string>
+    <string name="result_multiplayer_local">2 jogadores locais</string>
+    <string name="result_multiplayer_network">2 jogadores em rede</string>
 </resources>

@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 public class PlayGame extends AppCompatActivity {
@@ -41,11 +48,12 @@ public class PlayGame extends AppCompatActivity {
     private Context context;
     private Board board = new Board();
 
-    private TextView tvPlayerTurn, mBlackPieces, mWhitePieces;
+    private TextView tvPlayerTurn, mBlackPieces, mWhitePieces, tvWinPieces, tvLosePieces, tvWinnerNameDisplay;
     private ImageView ivProfilePicture, ivClosePopupServerIP;
     private Dialog dialog;
     private EditText etServerIP;
-    private Button btnConnect, btnTryAgain, btnYesss, mBtnPlayAgain, mBtnSkipTurn;
+    private Button btnConnect, btnTryAgain, btnYesss, mBtnPlayAgain, mBtnSkipTurn, btnTie;
+    private LinearLayout backScoreBoard, whiteScoreBoard;
 
     private boolean buttonsActivated;
     private int totalTurns;
@@ -61,8 +69,10 @@ public class PlayGame extends AppCompatActivity {
         setContentView(R.layout.activity_play_game);
 
         context = this;
-        tvPlayerTurn = (TextView) findViewById(R.id.tvPlayerTurn);
-        ivProfilePicture = (ImageView) findViewById(R.id.ivProfilePicture);
+        tvPlayerTurn = findViewById(R.id.tvPlayerTurn);
+        ivProfilePicture = findViewById(R.id.ivProfilePicture);
+        backScoreBoard = findViewById(R.id.blackScoreBoard);
+        whiteScoreBoard = findViewById(R.id.whiteScoreBoard);
 
         dialog = new Dialog(this);
 
@@ -71,11 +81,11 @@ public class PlayGame extends AppCompatActivity {
             gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
         }
 
-        /*TODO Resolve profile bugs
-        if(!getIntent().hasExtra("playername") && getIntent().hasExtra("profilepicturepath")){
-            tvPlayerTurn.setText(getIntent().getStringExtra("playername"));
-            if(getIntent().getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
-                File imgFile = new File(getIntent().getStringExtra("profilepicturepath"));
+
+        if(intent.hasExtra("playername") && intent.hasExtra("profilepicturepath")){
+            tvPlayerTurn.setText(intent.getStringExtra("playername"));
+            if(!intent.getStringExtra("profilepicturepath").equalsIgnoreCase("<none>")){
+                File imgFile = new File(intent.getStringExtra("profilepicturepath"));
                 defaultImagebitmap = drawableToBitmap(getDrawable(R.drawable.ic_person_black_208dp));
                 if(imgFile.exists()){
                     players[0] = new Player(tvPlayerTurn.getText().toString(), BitmapFactory.decodeFile(imgFile.getAbsolutePath()), false);
@@ -83,23 +93,20 @@ public class PlayGame extends AppCompatActivity {
                     players[0] = new Player(tvPlayerTurn.getText().toString(), defaultImagebitmap, false);
                 }
             }
-        }*/
+        }
 
         buttonsActivated = false;
         totalTurns = 0;
-        players[0] = new Player("Reis", defaultImagebitmap, false);
 
         switch (gameMode){
             case SINGLE_PLAYER:
                 players[1] = new Player("Bot", defaultImagebitmap, true);
-                tvPlayerTurn.setText(players[0].getName());
-                ivProfilePicture.setImageBitmap(players[0].getImage());
                 break;
             case LOCAL_MULTYPLAYER:
                 players[1] = new Player(intent.getStringExtra("player2Name"), defaultImagebitmap, false);
                 break;
             case NETWORK_MULTYPLAYER:
-                if(getIntent().getBooleanExtra("createServer", true)){
+                if(intent.getBooleanExtra("createServer", true)){
                     //TODO Cria server para outro jogador se conectar - (Verificar o exemplo do professor do pedra, papel e tesoura
                 }else{
                     //TODO Junta-se a um servidor
@@ -117,16 +124,15 @@ public class PlayGame extends AppCompatActivity {
         }
 
         initBoardGame();
-        drawBoard();
         initGame();
 
     }
 
     private void showServerIPInput(){
         dialog.setContentView(R.layout.dialog_input_server_ip);
-        ivClosePopupServerIP = (ImageView) dialog.findViewById(R.id.ivClosePopupServerIP);
-        btnConnect = (Button) dialog.findViewById(R.id.btnConnect);
-        etServerIP = (EditText)  dialog.findViewById(R.id.etServerIP);
+        ivClosePopupServerIP = dialog.findViewById(R.id.ivClosePopupServerIP);
+        btnConnect = dialog.findViewById(R.id.btnConnect);
+        etServerIP = dialog.findViewById(R.id.etServerIP);
 
         ivClosePopupServerIP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,11 +168,9 @@ public class PlayGame extends AppCompatActivity {
                 board.intelligentBotMove(Board.BLACK);
                 totalTurns++;
                 playerTurn = 0;
-                drawBoard();
             }
         }
-        ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
-        tvPlayerTurn.setText(players[playerTurn].getName());
+        drawBoard();
     }
 
     private void initBoardGame() {
@@ -192,7 +196,6 @@ public class PlayGame extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         makeMove(x, y);
-//                        Toast.makeText(context, "(" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
                     }
                 });
                 linRow.addView(ivCells[i][j], llCell);
@@ -200,7 +203,7 @@ public class PlayGame extends AppCompatActivity {
             llGameBoard.addView(linRow, llRow);
         }
 
-        mBtnPlayAgain = (Button)findViewById(R.id.btnPlayAgain);
+        mBtnPlayAgain = findViewById(R.id.btnPlayAgain);
         mBtnPlayAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,7 +214,7 @@ public class PlayGame extends AppCompatActivity {
             }
         });
 
-        mBtnSkipTurn = (Button)findViewById((R.id.btnSkipTurn));
+        mBtnSkipTurn = findViewById((R.id.btnSkipTurn));
         mBtnSkipTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,7 +224,6 @@ public class PlayGame extends AppCompatActivity {
                             board.checkNextTurnPossibleMoves(players[1].getColor());
                             board.intelligentBotMove(players[1].getColor());
                             players[0].setSkipAgainCard(Player.ALREADY_USED);
-                            drawBoard();
                         }
                          break;
                     case LOCAL_MULTYPLAYER:
@@ -229,10 +231,10 @@ public class PlayGame extends AppCompatActivity {
                             players[playerTurn].setSkipAgainCard(Player.ALREADY_USED);
                             playerTurn = (playerTurn + 1) % 2;
                             board.checkNextTurnPossibleMoves(players[playerTurn].getColor());
-                            drawBoard();
                         }
                         break;
                 }
+                drawBoard();
             }
         });
     }
@@ -246,9 +248,15 @@ public class PlayGame extends AppCompatActivity {
     }
 
     private void drawBoard() {
-
         tvPlayerTurn.setText(players[playerTurn].getName());
         ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+        if(players[playerTurn].getColor() == Board.BLACK){
+            backScoreBoard.setBackground(getDrawable(R.drawable.cell_empty_bg));
+            whiteScoreBoard.setBackground(getDrawable(R.drawable.cell_possible_move));
+        }else{
+            backScoreBoard.setBackground(getDrawable(R.drawable.cell_possible_move));
+            whiteScoreBoard.setBackground(getDrawable(R.drawable.cell_empty_bg));
+        }
 
         for (int i = 0; i < maxN; i++) {
             for (int j = 0; j < maxN; j++) {
@@ -298,9 +306,9 @@ public class PlayGame extends AppCompatActivity {
                 break;
         }
 
-        mBlackPieces = (TextView)findViewById(R.id.TextViewBlackPieces);
+        mBlackPieces = findViewById(R.id.TextViewBlackPieces);
         mBlackPieces.setText(String.valueOf(board.getPieces(board.BLACK)));
-        mWhitePieces = (TextView)findViewById(R.id.TextViewWhitePieces);
+        mWhitePieces = findViewById(R.id.TextViewWhitePieces);
         mWhitePieces.setText(String.valueOf(board.getPieces(board.WHITE)));
 
     }
@@ -369,7 +377,7 @@ public class PlayGame extends AppCompatActivity {
     }
 
     public Bitmap drawableToBitmap (Drawable drawable) {
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
@@ -390,40 +398,6 @@ public class PlayGame extends AppCompatActivity {
         return bitmap;
     }
 
-    public void onWin(View view) {
-        dialog.setContentView(R.layout.dialog_player_win);
-        btnYesss = (Button) dialog.findViewById(R.id.btnYesss);
-
-        btnYesss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //TODO Insert number of pieces
-        dialog.show();
-    }
-
-    public void onLose(View view) {
-        dialog.setContentView(R.layout.dialog_player_lose);
-        btnTryAgain = (Button) dialog.findViewById(R.id.btnTryAgain);
-
-        btnTryAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //TODO Insert number of pieces
-        dialog.show();
-    }
-
     public void resolveEndGame() {
         int winner;
 
@@ -434,26 +408,104 @@ public class PlayGame extends AppCompatActivity {
         else
             winner = board.WHITE;
 
+        saveGame(gameMode, players[0].getName(), board.getPieces( players[0].getColor()), players[1].getName(), board.getPieces(players[1].getColor()));
+
         switch (gameMode) {
             case SINGLE_PLAYER:
                 if (winner == 3) {
-//                    TODO insert tie thingy
+                    showOnTieDialog();
                 }
                 else if(players[0].getColor() == winner)
-                    onWin(findViewById(android.R.id.content));
+                    showOnWinDialog(null, -1);
                 else
-                    onLose(findViewById(android.R.id.content));
+                    showOnLoseDialog();
                 break;
             case LOCAL_MULTYPLAYER:
                 if (winner == 3) {
-//                    TODO insert tie thingy e maybe dizer quem ganhou em multyplayer local
+                    showOnTieDialog();
+                }else{
+                    if(players[0].getColor() == winner){
+                        showOnWinDialog(players[0].getName(), 0);
+                    }else{
+                        showOnWinDialog(players[1].getName(), 1);
+                    }
                 }
-                else if(players[0].getColor() == winner)
-                    onWin(findViewById(android.R.id.content));
-                else
-                    onLose(findViewById(android.R.id.content));
                 break;
-
         }
     }
+
+    private void showOnWinDialog(String name, int winner){
+        dialog.setContentView(R.layout.dialog_player_win);
+        btnYesss = dialog.findViewById(R.id.btnYesss);
+        tvWinPieces = dialog.findViewById(R.id.tvWinPieces);
+        tvWinnerNameDisplay = dialog.findViewById(R.id.tvWinnerNameDisplay);
+
+        if(name != null){
+            tvWinnerNameDisplay.setText(tvWinnerNameDisplay.getText() + " " + name + "!");
+            tvWinPieces.setText(board.getPieces(players[winner].getColor()) + " " + tvWinPieces.getText().toString());
+        }else{
+            tvWinPieces.setText(board.getPieces(players[0].getColor()) + " " + tvWinPieces.getText().toString());
+        }
+        btnYesss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void showOnLoseDialog() {
+        dialog.setContentView(R.layout.dialog_player_lose);
+        btnTryAgain = dialog.findViewById(R.id.btnTryAgain);
+        tvLosePieces = dialog.findViewById(R.id.tvLosePieces);
+
+        tvLosePieces.setText(board.getPieces(players[0].getColor()) + " " + tvLosePieces.getText().toString());
+
+        btnTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void showOnTieDialog() {
+        dialog.setContentView(R.layout.dialog_player_tie);
+        btnTie = dialog.findViewById(R.id.btnTie);
+
+        btnTie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void saveGame(int gameMode, String player1Name, int player1Score, String player2Name, int player2Score){
+        try {
+            File historicFile = new File(getApplicationContext().getFilesDir(), "historicFile");
+            if(!historicFile.exists()){
+                historicFile.createNewFile();
+            }
+            OutputStream stream = new FileOutputStream(historicFile, true);
+            stream.write((gameMode + ";" + player1Name + ";" + player1Score + ";" + player2Name + ";" + player2Score + "\n").getBytes());
+            stream.flush();
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -19,9 +19,9 @@
     <string name="yessss">YESSSS</string>
     <string name="heart_image">Heart image</string>
     <string name="awww_snap">Awww... Snap!</string>
-    <string name="losing_message">You have failed to win the game. Your loss was with</string>
+    <string name="losing_message">You have failed to win the game. Your loss was with:</string>
     <string name="try_again">Try again</string>
-    <string name="winning_message">Congratulations! You won the game with</string>
+    <string name="winning_message">Congratulations! You won the game with:</string>
     <string name="losing_image">Losing image</string>
     <string name="ok" translatable="false">Ok</string>
     <string name="player_2_name">Player 2 name</string>
@@ -34,6 +34,14 @@
     <string name="join_server">Join Server</string>
     <string name="server_ip">Server IP</string>
     <string name="connect">Connect</string>
-    <string name="black_pieces">Black:</string>
-    <string name="white_pieces">White:</string>
+    <string name="black_pieces">Black</string>
+    <string name="white_pieces">White</string>
+    <string name="lets_go_again">let\'s go again</string>
+    <string name="maybe_next_time">Maybe next time</string>
+    <string name="sad_face_image">Sad face image</string>
+    <string name="it_s_a_tie">It\'s a tie!</string>
+    <string name="result_single_player">Against the bot</string>
+    <string name="result_multiplayer_local">2 local players</string>
+    <string name="result_multiplayer_network">2 network players</string>
+    <string name="game_history">Game History</string>
 </resources>

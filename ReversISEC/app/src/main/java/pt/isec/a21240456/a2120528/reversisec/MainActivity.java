@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void showPlayername2Input(){
         dialog.setContentView(R.layout.dialog_input_playername);
-        ivClosePopupLose = (ImageView) dialog.findViewById(R.id.ivClosePopupLose);
-        dialogOkbtn = (Button) dialog.findViewById(R.id.dialogOkbtn);
-        etInputText = (EditText)  dialog.findViewById(R.id.etInputText);
+        ivClosePopupLose = dialog.findViewById(R.id.ivClosePopupLose);
+        dialogOkbtn = dialog.findViewById(R.id.dialogOkbtn);
+        etInputText = dialog.findViewById(R.id.etInputText);
 
         ivClosePopupLose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,14 +103,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void showConnectionType(){
         dialog.setContentView(R.layout.dialog_choose_server_client);
-        ivClosePopupConnectionType = (ImageView) dialog.findViewById(R.id.ivClosePopupConnectionType);
+        ivClosePopupConnectionType = dialog.findViewById(R.id.ivClosePopupConnectionType);
         ivClosePopupConnectionType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
-        btnCreateServer  = (Button) dialog.findViewById(R.id.btnCreateServer);
+        btnCreateServer  = dialog.findViewById(R.id.btnCreateServer);
         btnCreateServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 multiplayerActivityCreate(true);
             }
         });
-        btnJoinServer = (Button) dialog.findViewById(R.id.btnJoinServer);
+        btnJoinServer = dialog.findViewById(R.id.btnJoinServer);
         btnJoinServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,5 +167,10 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void onOlderGames(View view){
+        Intent intent = new Intent(this, GameHistoric.class);
+        startActivity(intent);
     }
 }
