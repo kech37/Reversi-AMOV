@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayGame"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingRight="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivProfilePicture"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_person_black_208dp"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/tvPlayerTurn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_textview"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:id="@+id/blackScoreBoard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/cell_possible_move">
+
+                    <TextView
+                        android:id="@+id/TextViewBlack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhiteBoardCell"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:text="@string/black_pieces" />
+
+                    <TextView
+                        android:id="@+id/TextViewBlackPieces"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhiteBoardCell"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:text="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/whiteScoreBoard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="4dp"
+                    android:background="@drawable/cell_possible_move">
+
+                    <TextView
+                        android:id="@+id/TextViewWhite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhiteBoardCell"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:text="@string/white_pieces"/>
+
+                    <TextView
+                        android:id="@+id/TextViewWhitePieces"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhiteBoardCell"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:text="0" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/btnChangeMode"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_input"
+                app:srcCompat="@drawable/ic_settings_backup_restore_black_24dp"
+                android:onClick="onChangeMode"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btnPlayAgain"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@drawable/button_pressed"
+                android:text="@string/play_again"
+                android:textSize="12sp"
+                android:textColor="@color/colorLoseFill"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/btnSkipTurn"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@drawable/button_pressed"
+                android:text="@string/skip_turn"
+                android:textSize="12sp"
+                android:textColor="@color/colorLoseFill"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/gameBoard"
+            android:layout_gravity="center"></LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

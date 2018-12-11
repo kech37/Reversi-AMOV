@@ -3,6 +3,7 @@ package pt.isec.a21240456.a2120528.reversisec;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -125,7 +126,35 @@ public class PlayGame extends AppCompatActivity {
 
         initBoardGame();
         initGame();
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("boardState", board);
+        outState.putSerializable("players", players);
+        outState.putInt("gameMode", gameMode);
+        outState.putBoolean("buttonsActivated", buttonsActivated);
+        outState.putInt("totalTurns", totalTurns);
+        outState.putInt("playerTurn", playerTurn);
+        outState.putString("serverIP", serverIP);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        board = (Board) savedInstanceState.getSerializable("boardState");
+        players = (Player[]) savedInstanceState.getSerializable("players");
+        gameMode = savedInstanceState.getInt("gameMode");
+        buttonsActivated = savedInstanceState.getBoolean("buttonsActivated");
+        totalTurns = savedInstanceState.getInt("totalTurns");
+        playerTurn = savedInstanceState.getInt("playerTurn");
+        serverIP = savedInstanceState.getString("serverIP");
+
+
+        drawBoard();
     }
 
     private void showServerIPInput(){
@@ -180,7 +209,12 @@ public class PlayGame extends AppCompatActivity {
         drawCells[3] = ContextCompat.getDrawable(context, R.drawable.cell_possible_move);
 
         LinearLayout llGameBoard = findViewById(R.id.gameBoard);
-        int cellSize = Math.round(getScreenSizeMinusPadding() / maxN);
+        int cellSize = 0;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            cellSize = Math.round(getScreenSizeMinusPadding() / maxN);
+        }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            cellSize = Math.round(getScreenSizeLandScapeMinusPadding() / maxN);
+        }
 
         LinearLayout.LayoutParams llRow = new LinearLayout.LayoutParams(cellSize * maxN, cellSize);
         LinearLayout.LayoutParams llCell = new LinearLayout.LayoutParams(cellSize, cellSize);
@@ -241,6 +275,10 @@ public class PlayGame extends AppCompatActivity {
 
     private float getScreenSizeMinusPadding(){
         return context.getResources().getDisplayMetrics().widthPixels - dpToPixels(32, context);
+    }
+
+    private float getScreenSizeLandScapeMinusPadding(){
+        return context.getResources().getDisplayMetrics().heightPixels - dpToPixels(64, context);
     }
 
     private int dpToPixels(float dp, Context context) {
