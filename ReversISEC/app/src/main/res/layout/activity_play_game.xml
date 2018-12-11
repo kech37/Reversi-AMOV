@@ -16,32 +16,36 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivProfilePicture"
-            android:layout_width="0dp"
+            android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@drawable/ic_person_black_208dp"
             app:civ_border_color="#FF000000"
             app:civ_border_width="2dp"
+            android:layout_marginRight="16dp"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/tvPlayerTurn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/empty_textview"
             android:textAlignment="center"
             android:textSize="24sp"
-            android:layout_weight="2"
-            android:layout_gravity="center_vertical"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button_pressed"
-            android:text="@string/skip_turn"
-            android:textColor="@color/colorLoseFill"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/btnChangeMode"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/button_input"
+            app:srcCompat="@drawable/ic_settings_backup_restore_black_24dp"
+            android:onClick="onChangeMode" />
+
 
     </LinearLayout>
 
