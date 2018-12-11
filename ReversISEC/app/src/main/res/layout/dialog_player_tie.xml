@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
-        app:cardBackgroundColor="@color/colorLose"
+        app:cardBackgroundColor="@color/colorTie"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
@@ -29,8 +29,8 @@
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="24sp"
-                android:textColor="@color/colorLoseFill"
-                android:text="@string/awww_snap"/>
+                android:textColor="@color/colorTieFill"
+                android:text="@string/it_s_a_tie"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -38,42 +38,28 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_sentiment_dissatisfied_black_24dp"
-                android:contentDescription="@string/losing_image" />
+                android:src="@drawable/ic_sentiment_neutral_black_24dp"
+                android:contentDescription="@string/sad_face_image" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textColor="@color/colorLoseFill"
-                android:text="@string/losing_message"/>
-
-            <TextView
-                android:id="@+id/tvLosePieces"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorLoseFill"
-                android:text="@string/pieces"/>
+                android:textColor="@color/colorTieFill"
+                android:text="@string/maybe_next_time"/>
 
             <Button
-                android:id="@+id/btnTryAgain"
+                android:id="@+id/btnTie"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/button_lose"
-                android:textColor="@color/colorLoseFill"
-                android:text="@string/try_again"/>
+                android:background="@drawable/button_tie"
+                android:textColor="#FFF9C4"
+                android:text="@string/lets_go_again"/>
 
         </LinearLayout>
 

@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBackgroundBoardCell">#67cbfc</color>
-    <color name="colorBackgroundBoardCellPossibleMove">#4588a9</color>
+    <color name="colorBackgroundBoardCell">#4fc3f7</color>
+    <color name="colorBackgroundBoardCellPossibleMove">#607d8b</color>
     <color name="colorBorderBoardCell">#000000</color>
     <color name="colorWhiteBoardCell">#ffffff</color>
     <color name="colorBlackBoardCell">#000000</color>
 
-    <color name="colorPrimary">#32a8e2</color>
-    <color name="colorPrimaryDark">#2379a4</color>
-    <color name="colorAccent">#ff4c41</color>
+    <color name="colorPrimary">#42a5f5</color>
+    <color name="colorPrimaryDark">#0277bd</color>
+    <color name="colorAccent">#ff5252</color>
 
-    <color name="colorWin">#a7f2c0</color>
-    <color name="colorWinFill">#38a85b</color>
-    <color name="colorGreen">#216f39</color>
+    <color name="colorWin">#b9f6ca</color>
+    <color name="colorWinFill">#4caf50</color>
+    <color name="colorGreen">#2e7d32</color>
 
-    <color name="colorLose">#ff4c41</color>
-    <color name="colorLoseFill">#ffffff</color>
-    <color name="colorRed">#8a2622</color>
+    <color name="colorLose">#ff8a80</color>
+    <color name="colorLoseFill">#ffebee</color>
+    <color name="colorRed">#c62828</color>
 
-    <color name="colorInputDialog">#32a8e2</color>
-    <color name="colorFillInputDialog">#2379a4</color>
-    <color name="colorTextInputDialog">#e6e9ea</color>
+    <color name="colorTie">#ffff8d</color>
+    <color name="colorTieFill">#f57f17</color>
+    <color name="colorYellow">#f9a825</color>
 
-    <color name="colorButtonPressed">#494c4d</color>
+    <color name="colorInputDialog">#42a5f5</color>
+    <color name="colorFillInputDialog">#0277bd</color>
+    <color name="colorTextInputDialog">#efebe9</color>
+
+    <color name="colorButtonPressed">#37474f</color>
 </resources>
