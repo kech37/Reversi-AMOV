@@ -212,8 +212,14 @@ public class PlayGame extends AppCompatActivity {
 		int cellSize = 0;
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			cellSize = Math.round(getScreenSizeMinusPadding() / maxN);
+			if(cellSize > 160){
+				cellSize = 160;
+			}
 		} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			cellSize = Math.round(getScreenSizeLandScapeMinusPadding() / maxN);
+			if(cellSize > 110){
+				cellSize = 110;
+			}
 		}
 		
 		LinearLayout.LayoutParams llRow = new LinearLayout.LayoutParams(cellSize * maxN, cellSize);
