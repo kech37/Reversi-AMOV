@@ -36,21 +36,24 @@ public class MainActivity extends AppCompatActivity {
 	
 	public void onSinglePlayer(View view) {
 		Intent intent = new Intent(this, PlayGame.class);
-		checkConfigFile(intent);
-		intent.putExtra("mode", PlayGame.SINGLE_PLAYER);
-		startActivity(intent);
+		if(!checkConfigFile(intent)) {
+			showProfileWarningDialog();
+		} else {
+			intent.putExtra("mode", PlayGame.SINGLE_PLAYER);
+			startActivity(intent);
+		}
 	}
 	
 	public void onMultiplayer(View view) {
 		dialog.setContentView(R.layout.dialog_choose_multiplayer);
-		ivClosePopupLoseMultiplayer = (ImageView) dialog.findViewById(R.id.ivClosePopupLoseMultiplayer);
+		ivClosePopupLoseMultiplayer = dialog.findViewById(R.id.ivClosePopupLoseMultiplayer);
 		ivClosePopupLoseMultiplayer.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				dialog.dismiss();
 			}
 		});
-		btnLocalMultiplayer = (Button) dialog.findViewById(R.id.btnLocalMultiplayer);
+		btnLocalMultiplayer = dialog.findViewById(R.id.btnLocalMultiplayer);
 		btnLocalMultiplayer.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 				showPlayername2Input();
 			}
 		});
-		btnNetworkMultiplayer = (Button) dialog.findViewById(R.id.btnNetworkMultiplayer);
+		btnNetworkMultiplayer = dialog.findViewById(R.id.btnNetworkMultiplayer);
 		btnNetworkMultiplayer.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -90,10 +93,13 @@ public class MainActivity extends AppCompatActivity {
 				player2Name = etInputText.getText().toString();
 				dialog.dismiss();
 				Intent intent = new Intent(getApplicationContext(), PlayGame.class);
-				checkConfigFile(intent);
-				intent.putExtra("mode", PlayGame.LOCAL_MULTYPLAYER);
-				intent.putExtra("player2Name", player2Name);
-				startActivity(intent);
+				if(!checkConfigFile(intent)) {
+					showProfileWarningDialog();
+				} else {
+					intent.putExtra("mode", PlayGame.LOCAL_MULTYPLAYER);
+					intent.putExtra("player2Name", player2Name);
+					startActivity(intent);
+				}
 			}
 		});
 		
@@ -133,10 +139,29 @@ public class MainActivity extends AppCompatActivity {
 	
 	private void multiplayerActivityCreate(boolean createServer) {
 		Intent intent = new Intent(getApplicationContext(), PlayGame.class);
-		checkConfigFile(intent);
-		intent.putExtra("mode", PlayGame.NETWORK_MULTYPLAYER);
-		intent.putExtra("createServer", createServer);
-		startActivity(intent);
+		if(!checkConfigFile(intent)) {
+			showProfileWarningDialog();
+		} else {
+			intent.putExtra("mode", PlayGame.NETWORK_MULTYPLAYER);
+			intent.putExtra("createServer", createServer);
+			startActivity(intent);
+		}
+	}
+	
+	private void showProfileWarningDialog() {
+		dialog.setContentView(R.layout.dialog_warning_profile);
+		Button btnWarningProfile = dialog.findViewById(R.id.btnWarningProfile);
+		
+		btnWarningProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+			}
+		});
+		
+		
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.show();
 	}
 	
 	public void onProfile(View view) {
@@ -145,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 		startActivity(intent);
 	}
 	
-	private void checkConfigFile(Intent intent) {
+	private boolean checkConfigFile(Intent intent) {
 		File configFile = new File(getApplicationContext().getFilesDir().toString() + "/configs");
 		if(configFile.exists()) {
 			try {
@@ -163,9 +188,13 @@ public class MainActivity extends AppCompatActivity {
 				
 				in.close();
 				reader.close();
+				return true;
 			} catch(IOException e) {
 				e.printStackTrace();
+				return false;
 			}
+		} else {
+			return false;
 		}
 	}
 	

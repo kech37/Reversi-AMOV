@@ -42,4 +42,6 @@
     <string name="result_single_player">Contra o computador</string>
     <string name="result_multiplayer_local">2 jogadores locais</string>
     <string name="result_multiplayer_network">2 jogadores em rede</string>
+    <string name="warning_profile_title">Aviso</string>
+    <string name="profile_warning_message">Antes de começar um jogo é necessário configurar o seu perfil. Por favor diriga-se à zona de perfil.</string>
 </resources>

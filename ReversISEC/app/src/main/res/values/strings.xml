@@ -44,4 +44,6 @@
     <string name="result_multiplayer_local">2 local players</string>
     <string name="result_multiplayer_network">2 network players</string>
     <string name="game_history">Game History</string>
+    <string name="profile_warning_message">Before you start a game, you need to configure your profile first. Go to the profile section please.</string>
+    <string name="warning_profile_title">Warning</string>
 </resources>
