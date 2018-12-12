@@ -49,11 +49,11 @@ public class PlayGame extends AppCompatActivity {
 	private Context context;
 	private Board board = new Board();
 	
-	private TextView tvPlayerTurn, mBlackPieces, mWhitePieces, tvWinPieces, tvLosePieces, tvWinnerNameDisplay;
+	private TextView tvPlayerTurn, mBlackPieces, mWhitePieces;
 	private ImageView ivProfilePicture, ivClosePopupServerIP;
 	private Dialog dialog;
 	private EditText etServerIP;
-	private Button btnConnect, btnTryAgain, btnYesss, mBtnPlayAgain, mBtnSkipTurn, btnTie;
+	private Button mBtnPlayAgain, mBtnSkipTurn;
 	private LinearLayout backScoreBoard, whiteScoreBoard;
 	
 	private boolean buttonsActivated;
@@ -160,7 +160,7 @@ public class PlayGame extends AppCompatActivity {
 	private void showServerIPInput() {
 		dialog.setContentView(R.layout.dialog_input_server_ip);
 		ivClosePopupServerIP = dialog.findViewById(R.id.ivClosePopupServerIP);
-		btnConnect = dialog.findViewById(R.id.btnConnect);
+		Button btnConnect = dialog.findViewById(R.id.btnConnect);
 		etServerIP = dialog.findViewById(R.id.etServerIP);
 		
 		ivClosePopupServerIP.setOnClickListener(new View.OnClickListener() {
@@ -477,9 +477,9 @@ public class PlayGame extends AppCompatActivity {
 	
 	private void showOnWinDialog(String name, int winner) {
 		dialog.setContentView(R.layout.dialog_player_win);
-		btnYesss = dialog.findViewById(R.id.btnYesss);
-		tvWinPieces = dialog.findViewById(R.id.tvWinPieces);
-		tvWinnerNameDisplay = dialog.findViewById(R.id.tvWinnerNameDisplay);
+		Button btnYesss = dialog.findViewById(R.id.btnYesss);
+		TextView tvWinPieces = dialog.findViewById(R.id.tvWinPieces);
+		TextView tvWinnerNameDisplay = dialog.findViewById(R.id.tvWinnerNameDisplay);
 		
 		if(name != null) {
 			tvWinnerNameDisplay.setText(tvWinnerNameDisplay.getText() + " " + name + "!");
@@ -501,8 +501,8 @@ public class PlayGame extends AppCompatActivity {
 	
 	private void showOnLoseDialog() {
 		dialog.setContentView(R.layout.dialog_player_lose);
-		btnTryAgain = dialog.findViewById(R.id.btnTryAgain);
-		tvLosePieces = dialog.findViewById(R.id.tvLosePieces);
+		Button btnTryAgain = dialog.findViewById(R.id.btnTryAgain);
+		TextView tvLosePieces = dialog.findViewById(R.id.tvLosePieces);
 		
 		tvLosePieces.setText(board.getPieces(players[0].getColor()) + " " + tvLosePieces.getText().toString());
 		
@@ -520,7 +520,7 @@ public class PlayGame extends AppCompatActivity {
 	
 	private void showOnTieDialog() {
 		dialog.setContentView(R.layout.dialog_player_tie);
-		btnTie = dialog.findViewById(R.id.btnTie);
+		Button btnTie = dialog.findViewById(R.id.btnTie);
 		
 		btnTie.setOnClickListener(new View.OnClickListener() {
 			@Override
