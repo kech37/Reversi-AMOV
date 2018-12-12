@@ -546,4 +546,8 @@ public class PlayGame extends AppCompatActivity {
         }
     }
 
+    public void onChangeMode(View view){
+        //TODO Mudar modo de jogo
+    }
+
 }
