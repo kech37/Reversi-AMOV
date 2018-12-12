@@ -1,9 +1,15 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,12 +20,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameHistoric extends AppCompatActivity {
+public class GameHistory extends AppCompatActivity {
+	private boolean res = false;
+	private Dialog dialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_historic);
+		
+		
+		dialog = new Dialog(this);
 		
 		List<GameRegist> gameScoresList = new ArrayList<>();
 		
@@ -48,5 +59,39 @@ public class GameHistoric extends AppCompatActivity {
 		AdapterGameHistoricList adapter = new AdapterGameHistoricList(this, gameScoresList);
 		
 		gameHistoricList.setAdapter(adapter);
+	}
+	
+	public void onBtnDelete(View view){
+		File file = new File(getApplicationContext().getFilesDir() + "/historicFile");
+		if(file.exists()){
+			showConfirmDeleteDialog(file);
+		}else{
+			Toast.makeText(getApplicationContext(), "Therens't nothing to delete!", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private void showConfirmDeleteDialog(final File file){
+		dialog.setContentView(R.layout.dialog_confirm_delete_history);
+		
+		Button yes = dialog.findViewById(R.id.btnDeleteYes);
+		yes.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				file.delete();
+				dialog.dismiss();
+				finish();
+			}
+		});
+		
+		Button no = dialog.findViewById(R.id.btnDeleteNo);
+		no.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+			}
+		});
+		
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.show();
 	}
 }

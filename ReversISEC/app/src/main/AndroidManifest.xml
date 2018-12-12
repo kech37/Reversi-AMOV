@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".PlayGame" />
         <activity android:name=".ConfigProfile" />
-        <activity android:name=".GameHistoric" />
+        <activity android:name=".GameHistory" />
     </application>
 
 </manifest>

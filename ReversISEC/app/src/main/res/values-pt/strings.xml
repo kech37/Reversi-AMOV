@@ -44,4 +44,7 @@
     <string name="result_multiplayer_network">2 jogadores em rede</string>
     <string name="warning_profile_title">Aviso</string>
     <string name="profile_warning_message">Antes de começar um jogo é necessário configurar o seu perfil. Por favor diriga-se à zona de perfil.</string>
+    <string name="no">Não</string>
+    <string name="yes">Sim</string>
+    <string name="confirm_delete_dialog">Apagar todo histórico dos jogos?</string>
 </resources>

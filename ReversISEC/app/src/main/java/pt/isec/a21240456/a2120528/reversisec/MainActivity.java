@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	public void onOlderGames(View view) {
-		Intent intent = new Intent(this, GameHistoric.class);
+		Intent intent = new Intent(this, GameHistory.class);
 		startActivity(intent);
 	}
 }
