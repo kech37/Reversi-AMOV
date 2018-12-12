@@ -551,6 +551,7 @@ public class PlayGame extends AppCompatActivity {
 	
 	public void onChangeMode(View view) {
 		//TODO Mudar modo de jogo
+		Toast.makeText(getApplicationContext(), "Change mode!", Toast.LENGTH_SHORT).show();
 	}
 	
 }

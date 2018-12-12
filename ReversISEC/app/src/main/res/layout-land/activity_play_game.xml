@@ -115,7 +115,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_input"
                 android:onClick="onChangeMode"
-                app:srcCompat="@drawable/ic_change_mode_white_24dp" />
+                app:srcCompat="@drawable/ic_change_mode_white_36dp" />
 
             <Button
                 android:id="@+id/btnPlayAgain"

@@ -69,7 +69,7 @@ public class Board implements Serializable {
 		
 		nw = validMoveAndResolve(turn, row, col, -1, -1, resolve);
 		nn = validMoveAndResolve(turn, row, col, -1, 0, resolve);
-		ne = validMoveAndResolve(turn, row, col, 1, 1, resolve);
+		ne = validMoveAndResolve(turn, row, col, -1, 1, resolve);
 		ww = validMoveAndResolve(turn, row, col, 0, -1, resolve);
 		ee = validMoveAndResolve(turn, row, col, 0, 1, resolve);
 		sw = validMoveAndResolve(turn, row, col, 1, -1, resolve);
