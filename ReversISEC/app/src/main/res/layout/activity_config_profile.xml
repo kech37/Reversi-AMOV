@@ -86,11 +86,11 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
                     android:layout_marginRight="25dp"
                     android:background="@drawable/button_input"
-                    android:src="@drawable/ic_copyright_black_24dp"
-                    android:onClick="onCopyright"/>
+                    android:onClick="onCopyright"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_copyright_black_24dp" />
 
                     <Button
                         android:id="@+id/btnSaveProfile"

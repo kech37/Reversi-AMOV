@@ -3,34 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:gravity="center">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="15dp"
-        app:cardBackgroundColor="@color/colorLose"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        app:cardBackgroundColor="@color/colorLose"
+        app:cardCornerRadius="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp">
+            android:layout_marginBottom="25dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:text="@string/awww_snap"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textSize="24sp"
                 android:textColor="@color/colorLoseFill"
-                android:text="@string/awww_snap"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -38,8 +38,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_sentiment_dissatisfied_black_24dp"
-                android:contentDescription="@string/losing_image" />
+                android:contentDescription="@string/losing_image"
+                android:src="@drawable/ic_sentiment_dissatisfied_black_24dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -47,10 +47,10 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
+                android:text="@string/losing_message"
                 android:textAlignment="center"
-                android:textSize="18sp"
                 android:textColor="@color/colorLoseFill"
-                android:text="@string/losing_message"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvLosePieces"
@@ -59,21 +59,21 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
+                android:text="@string/pieces"
                 android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:textColor="@color/colorLoseFill"
-                android:text="@string/pieces"/>
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnTryAgain"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/button_lose"
-                android:textColor="@color/colorLoseFill"
-                android:text="@string/try_again"/>
+                android:text="@string/try_again"
+                android:textColor="@color/colorLoseFill" />
 
         </LinearLayout>
 
