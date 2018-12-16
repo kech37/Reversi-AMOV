@@ -47,4 +47,5 @@
     <string name="no">Não</string>
     <string name="yes">Sim</string>
     <string name="confirm_delete_dialog">Apagar todo histórico dos jogos?</string>
+    <string name="waiting_for_player">À espera de jogador...</string>
 </resources>

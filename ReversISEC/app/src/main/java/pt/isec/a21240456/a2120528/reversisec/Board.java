@@ -24,6 +24,8 @@ public class Board implements Serializable {
 	public Board() {
 		newGame();
 	}
+
+	public int[][] getCells() {return cells;}
 	
 	public void newGame() {
 		for(int[] row : cells)

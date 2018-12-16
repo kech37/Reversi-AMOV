@@ -21,8 +21,8 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
 	private Dialog dialog;
 	private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer, btnCreateServer, btnJoinServer;
-	private EditText etInputText;
-	private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer, ivClosePopupConnectionType;
+	private EditText etInputText, etServerIP;
+	private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer, ivClosePopupConnectionType, ivClosePopupServerIP;
 	private String player2Name;
 	
 	
@@ -129,10 +129,36 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				dialog.dismiss();
-				multiplayerActivityCreate(false);
+				startClientDialog();
 			}
 		});
 		
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.show();
+	}
+
+	private void startClientDialog() {
+		dialog.setContentView(R.layout.dialog_input_server_ip);
+		ivClosePopupServerIP = dialog.findViewById(R.id.ivClosePopupServerIP);
+		Button btnConnect = dialog.findViewById(R.id.btnConnect);
+		etServerIP = dialog.findViewById(R.id.etServerIP);
+
+		ivClosePopupServerIP.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				finish();
+			}
+		});
+
+		btnConnect.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				multiplayerActivityCreate(false);
+			}
+		});
+
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.show();
 	}

@@ -22,7 +22,15 @@ public class Player implements Serializable {
 		this.bot = bot;
 		this.image = image;
 	}
-	
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setImage(Bitmap image) {
+		this.image = image;
+	}
+
 	public Bitmap getImage() {
 		return image;
 	}

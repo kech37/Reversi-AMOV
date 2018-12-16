@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,31 +54,31 @@ public class PlayGame extends AppCompatActivity {
 	private Board board = new Board();
 	
 	private TextView tvPlayerTurn, mBlackPieces, mWhitePieces;
-	private ImageView ivProfilePicture, ivClosePopupServerIP;
+	private ImageView ivProfilePicture;
 	private Dialog dialog;
-	private EditText etServerIP;
-	private Button mBtnPlayAgain, mBtnSkipTurn;
+	private Button mBtnPlayAgain, mBtnSkipTurn,dialogOkbtn;
 	private LinearLayout backScoreBoard, whiteScoreBoard;
 	
 	private boolean buttonsActivated;
 	private int totalTurns;
 	private int playerTurn;
-	
+
+	private NetworkAdapter networkAdapter;
 	private String serverIP;
-	
+
 	private Bitmap defaultImagebitmap;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_play_game);
-		
+
 		context = this;
 		tvPlayerTurn = findViewById(R.id.tvPlayerTurn);
 		ivProfilePicture = findViewById(R.id.ivProfilePicture);
 		backScoreBoard = findViewById(R.id.blackScoreBoard);
 		whiteScoreBoard = findViewById(R.id.whiteScoreBoard);
-		
+
 		dialog = new Dialog(this);
 		
 		Intent intent = getIntent();
@@ -108,25 +112,24 @@ public class PlayGame extends AppCompatActivity {
 				break;
 			case NETWORK_MULTYPLAYER:
 				if(intent.getBooleanExtra("createServer", true)) {
-					//TODO Cria server para outro jogador se conectar - (Verificar o exemplo do professor do pedra, papel e tesoura
+                    networkAdapter = new NetworkAdapter(context, NetworkAdapter.SERVER);
+                    networkAdapter.startNetwork();
+                    networkAdapter.startServerSide();
 				} else {
-					//TODO Junta-se a um servidor
-					
-					// Chama uma dialog para o utilizador inserir o IP
-					// que se deve conectar (como no exemplo do
-					// professor do pedra, papel e tesoura).
-					// o IP é guardado em serverIP
-					showServerIPInput();
+					serverIP = "10.0.2.2";
+					networkAdapter = new NetworkAdapter(context, NetworkAdapter.CLIENT);
+					networkAdapter.startNetwork();
+					networkAdapter.startClientSide(serverIP);
 				}
-				
-				//TODO tem que receber a informação do jogador adversario de modo a apresentar no ecrã de jogo
-				players[1] = new Player("Receber INFO", defaultImagebitmap, false);
+				players[1] = new Player(intent.getStringExtra("player2Name"), defaultImagebitmap, false);
 				break;
 		}
 		
 		initBoardGame();
-		initGame();
-	}
+
+        if(gameMode != NETWORK_MULTYPLAYER || networkAdapter.getMode() == NetworkAdapter.SERVER)
+		    initGame();
+        }
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -156,49 +159,24 @@ public class PlayGame extends AppCompatActivity {
 		
 		drawBoard();
 	}
-	
-	private void showServerIPInput() {
-		dialog.setContentView(R.layout.dialog_input_server_ip);
-		ivClosePopupServerIP = dialog.findViewById(R.id.ivClosePopupServerIP);
-		Button btnConnect = dialog.findViewById(R.id.btnConnect);
-		etServerIP = dialog.findViewById(R.id.etServerIP);
-		
-		ivClosePopupServerIP.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				dialog.dismiss();
-				finish();
-			}
-		});
-		
-		btnConnect.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				serverIP = etServerIP.getText().toString();
-				dialog.dismiss();
-			}
-		});
-		
-		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-		dialog.show();
-	}
-	
+
 	private void initGame() {
-		Random random = new Random();
-		if((random.nextInt(100) + 1) <= 50) {
-			playerTurn = 0;
-			players[0].setColor(Board.BLACK);
-			players[1].setColor(Board.WHITE);
-		} else {
-			playerTurn = 1;
-			players[0].setColor(Board.WHITE);
-			players[1].setColor(Board.BLACK);
-			if(gameMode == SINGLE_PLAYER) {
-				board.intelligentBotMove(Board.BLACK);
-				totalTurns++;
-				playerTurn = 0;
-			}
-		}
+        Random random = new Random();
+        if ((random.nextInt(100) + 1) <= 50) {
+            playerTurn = 0;
+            players[0].setColor(Board.BLACK);
+            players[1].setColor(Board.WHITE);
+        } else {
+            playerTurn = 1;
+            players[0].setColor(Board.WHITE);
+            players[1].setColor(Board.BLACK);
+            if (gameMode == SINGLE_PLAYER) {
+                board.intelligentBotMove(Board.BLACK);
+                totalTurns++;
+                playerTurn = 0;
+            }
+        }
+
 		drawBoard();
 	}
 	
@@ -273,10 +251,14 @@ public class PlayGame extends AppCompatActivity {
 							board.checkNextTurnPossibleMoves(players[playerTurn].getColor());
 						}
 						break;
+					case NETWORK_MULTYPLAYER:
+						//TODO Skip card
+						break;
 				}
 				drawBoard();
 			}
 		});
+		drawBoard();
 	}
 	
 	private float getScreenSizeMinusPadding() {
@@ -291,7 +273,7 @@ public class PlayGame extends AppCompatActivity {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
 	}
 	
-	private void drawBoard() {
+	public void drawBoard() {
 		tvPlayerTurn.setText(players[playerTurn].getName());
 		ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
 		if(players[playerTurn].getColor() == Board.BLACK) {
@@ -301,7 +283,7 @@ public class PlayGame extends AppCompatActivity {
 			backScoreBoard.setBackground(getDrawable(R.drawable.cell_possible_move));
 			whiteScoreBoard.setBackground(getDrawable(R.drawable.cell_empty_bg));
 		}
-		
+
 		for(int i = 0; i < maxN; i++) {
 			for(int j = 0; j < maxN; j++) {
 				switch(board.getCell(i, j)) {
@@ -335,7 +317,7 @@ public class PlayGame extends AppCompatActivity {
 						mBtnSkipTurn.setBackground(getResources().getDrawable(R.drawable.button_pressed, null));
 				}
 				break;
-			case LOCAL_MULTYPLAYER:
+			default:
 				if(totalTurns >= 8) {
 					if(players[playerTurn].getPlayAgainCard() == Player.NEVER_USED)
 						mBtnPlayAgain.setBackground(getResources().getDrawable(R.drawable.button_input, null));
@@ -387,38 +369,44 @@ public class PlayGame extends AppCompatActivity {
 							resolveEndGame();
 						drawBoard();
 					}
-				} else if(!players[0].isBot() && !players[1].isBot()) {
-					if(board.makeMove(players[playerTurn].getColor(), x, y)) {
-						totalTurns++;
-						playerTurn = (playerTurn + 1) % 2;
-						if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
-							resolveEndGame();
-						drawBoard();
-					}
-				} else if(players[0].isBot()) {
-					if(board.makeMove(players[1].getColor(), x, y)) {
-						totalTurns++;
-						board.intelligentBotMove(players[0].getColor());
-						totalTurns++;
-						if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
-							resolveEndGame();
-						drawBoard();
-					}
-				} else if(players[1].isBot()) {
-					if(board.makeMove(players[0].getColor(), x, y)) {
-						totalTurns++;
-						board.intelligentBotMove(players[1].getColor());
-						totalTurns++;
-						if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
-							resolveEndGame();
-						drawBoard();
-					}
 				}
+                else if(board.makeMove(players[playerTurn].getColor(), x, y)) {
+                    totalTurns++;
+                    playerTurn = (playerTurn + 1) % 2;
+                    if(!board.checkNextTurnPossibleMoves(players[playerTurn].getColor()))
+                        resolveEndGame();
+                    drawBoard();
+                }
+				break;
+            case NETWORK_MULTYPLAYER:
+				    board.addPiece(players[0].getColor(), x, y);
+					sendGamePacket(x,y);
+					totalTurns++;
+					drawBoard();
 				break;
 		}
 	}
+
+    public void onChangeMode(View view) {
+        if(gameMode == LOCAL_MULTYPLAYER) {
+            gameMode = SINGLE_PLAYER;
+            if(playerTurn == 1) {
+                if(!board.intelligentBotMove(players[1].getColor()))
+                    resolveEndGame();
+                totalTurns++;
+                playerTurn = 0;
+                if(!board.checkNextTurnPossibleMoves(players[0].getColor()))
+                    resolveEndGame();
+                drawBoard();
+            }
+        }
+        else {
+            gameMode = LOCAL_MULTYPLAYER;
+            
+        }
+    }
 	
-	public Bitmap drawableToBitmap(Drawable drawable) {
+	private Bitmap drawableToBitmap(Drawable drawable) {
 		Bitmap bitmap;
 		
 		if(drawable instanceof BitmapDrawable) {
@@ -440,7 +428,7 @@ public class PlayGame extends AppCompatActivity {
 		return bitmap;
 	}
 	
-	public void resolveEndGame() {
+	private void resolveEndGame() {
 		int winner;
 		
 		if(board.getPieces(board.BLACK) == board.getPieces(board.WHITE))
@@ -549,9 +537,95 @@ public class PlayGame extends AppCompatActivity {
 		}
 	}
 	
-	public void onChangeMode(View view) {
-		//TODO Mudar modo de jogo
-		Toast.makeText(getApplicationContext(), "Change mode!", Toast.LENGTH_SHORT).show();
+
+
+
+	Handler NetReadyHandler = new Handler()
+	{
+		public void handleMessage(Message msg)
+		{
+			dialog.setContentView(R.layout.dialog_network_is_ready);
+			dialogOkbtn = dialog.findViewById(R.id.btnOk);
+			dialogOkbtn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((PlayGame)context).sendProfilePacket();
+					dialog.dismiss();
+				}
+			});
+			dialog.show();		}
+	};
+
+	private String serializePacket(Packet p){
+		Gson gson = new Gson();
+		String json = gson.toJson(p);
+		return json;
+    }
+
+    private Packet deserializePacket(String json){
+		Gson gson = new Gson();
+		Packet p = gson.fromJson(json, Packet.class);
+	    return p;
+    }
+
+    public void sendProfilePacket(){
+		Packet p = new Packet(players[0]);
+		String s = serializePacket(p);
+		networkAdapter.sendSerializedPacket(s);
 	}
+
+	private void sendGamePacket(int row, int col){
+		Packet p = new Packet(row, col,
+				players[0].getPlayAgainCard(),
+				players[0].getSkipAgainCard());
+		String s = serializePacket(p);
+		networkAdapter.sendSerializedPacket(s);
+	}
+
+	public void readPacket(String inputString) {
+	    Packet p = new Packet();
+		p = deserializePacket(inputString);
+        if(p != null) {
+            if (!p.isPlay())
+                readProfilePacket(p);
+            else
+                readMovePacket(p);
+        }
+	}
+
+	private void readProfilePacket(Packet p) {
+		players[1] = new Player(p.getPlayer().getName(),
+				p.getPlayer().getImage(),
+				p.getPlayer().isBot());
+		if(networkAdapter.getMode() == NetworkAdapter.CLIENT) {
+			if (players[1].getColor() == Board.BLACK) {
+				players[0].setColor(Board.WHITE);
+				playerTurn = 1;
+				Toast.makeText(context, "I'm white", Toast.LENGTH_SHORT).show();
+			}
+			else {
+				players[0].setColor(Board.BLACK);
+				playerTurn = 0;
+				Toast.makeText(context, "I'm black", Toast.LENGTH_SHORT).show();
+			}
+		}
+		else if(networkAdapter.getMode() == NetworkAdapter.SERVER) {
+		    if (players[0].getColor() == Board.WHITE) {
+                players[1].setColor(Board.BLACK);
+                playerTurn = 1;
+            }
+		    else {
+                players[1].setColor(Board.WHITE);
+                playerTurn = 0;
+            }
+        }
+	}
+
+    private void readMovePacket(Packet p) {
+	    players[1].setPlayAgainCard(p.getPlayAgain());
+        players[1].setSkipAgainCard(p.getSkip());
+	    board.addPiece(players[1].getColor(), p.getRow(), p.getCol());
+    }
+
 	
 }
