@@ -44,7 +44,7 @@ public class PlayGameActivity extends AppCompatActivity {
 	private Player[] players = new Player[2];
 	
 	private int gameMode;
-	int showMoves;
+	private int suggestedMoves;
 	private Context context;
 	private Board board = new Board();
 	
@@ -79,7 +79,7 @@ public class PlayGameActivity extends AppCompatActivity {
 		Intent intent = getIntent();
 		if(intent != null) {
 			gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
-			showMoves = intent.getIntExtra("moves", 0);
+			suggestedMoves = intent.getIntExtra("suggestedMoves", 0);
 		}
 		
 		
@@ -293,7 +293,7 @@ public class PlayGameActivity extends AppCompatActivity {
 						ivCells[i][j].setBackground(drawCells[2]);
 						break;
 					case Board.POSSIBLE_MOVE:
-						if(showMoves == 0)
+						if(suggestedMoves == 0)
 							ivCells[i][j].setBackground(drawCells[0]);
 						else
 							ivCells[i][j].setBackground(drawCells[3]);

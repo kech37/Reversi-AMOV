@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
 	private Dialog dialog;
 	private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer, btnCreateServer, btnJoinServer;
-    private Switch moveSwitch;
 	private EditText etInputText, etServerIP;
 	private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer, ivClosePopupConnectionType, ivClosePopupServerIP;
 	private String player2Name;
@@ -35,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		
 		dialog = new Dialog(this);
-
-        moveSwitch = (Switch) findViewById(R.id.showPlaysSwitch);
-
 	}
 	
 	public void onSinglePlayer(View view) {
@@ -46,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
 			showProfileWarningDialog();
 		} else {
 			intent.putExtra("mode", PlayGameActivity.SINGLE_PLAYER);
-			if(moveSwitch.isChecked())
-				intent.putExtra("moves", 1);
-			else
-				intent.putExtra("moves", 0);
 			startActivity(intent);
 		}
 	}
@@ -103,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
 				player2Name = etInputText.getText().toString();
 				dialog.dismiss();
 				Intent intent = new Intent(getApplicationContext(), PlayGameActivity.class);
-
-				if(moveSwitch.isChecked())
-					intent.putExtra("moves", 1);
-				else
-					intent.putExtra("moves", 0);
 
 				if(!checkConfigFile(intent)) {
 					showProfileWarningDialog();
@@ -182,11 +169,6 @@ public class MainActivity extends AppCompatActivity {
 	private void multiplayerActivityCreate(boolean createServer) {
 		Intent intent = new Intent(getApplicationContext(), PlayGameActivity.class);
 
-		if(moveSwitch.isChecked())
-			intent.putExtra("moves", 1);
-		else
-			intent.putExtra("moves", 0);
-
 		if(!checkConfigFile(intent)) {
 			showProfileWarningDialog();
 		} else {
@@ -233,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 				
 				intent.putExtra("playername", temp[0]);
 				intent.putExtra("profilepicturepath", temp[1]);
-				
+				intent.putExtra("suggestedMoves", Integer.parseInt(temp[2]));
 				in.close();
 				reader.close();
 				return true;

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -35,7 +36,9 @@ public class ConfigProfile extends AppCompatActivity {
     private ImageView ivProfilePicture;
     private Bitmap profileBitmap;
     private EditText etPlayerName;
+    private Switch suggestedMovesSwitch;
     private boolean changedPicture;
+    private int suggestedMoves;
 
     private Dialog dialog;
     private ImageView ivClosePopupCopyright;
@@ -47,6 +50,7 @@ public class ConfigProfile extends AppCompatActivity {
 
         ivProfilePicture = findViewById(R.id.ivProfile);
         etPlayerName = findViewById(R.id.etPlayerName);
+        suggestedMovesSwitch = (Switch) findViewById(R.id.showPlaysSwitch);
 
         changedPicture = false;
 
@@ -59,6 +63,15 @@ public class ConfigProfile extends AppCompatActivity {
                     ivProfilePicture.setImageBitmap(bitmap);
                 }
             }
+        }
+
+        if(getIntent().getIntExtra("suggestedMoves", 0) == 0) {
+            suggestedMovesSwitch.setChecked(false);
+            suggestedMoves = 0;
+        }
+        else if(getIntent().getIntExtra("suggestedMoves", 0) == 1){
+            suggestedMovesSwitch.setChecked(true);
+            suggestedMoves = 1;
         }
 
         dialog = new Dialog(this);
@@ -81,6 +94,11 @@ public class ConfigProfile extends AppCompatActivity {
     }
 
     public void onSaveProfile(View view){
+        if(suggestedMovesSwitch.isChecked())
+            suggestedMoves = 1;
+        else
+            suggestedMoves = 0;
+
         try {
             OutputStream stream;
             String picturePath;
@@ -98,7 +116,7 @@ public class ConfigProfile extends AppCompatActivity {
             }
             File configFile = new File(getApplicationContext().getFilesDir(), "configs");
             stream = new FileOutputStream(configFile);
-            stream.write((etPlayerName.getText().toString() + ";" + picturePath).getBytes());
+            stream.write((etPlayerName.getText().toString() + ";" + picturePath + ";" + suggestedMoves).getBytes());
             stream.flush();
             stream.close();
             Toast.makeText(getApplicationContext(), getResources().getText(R.string.profile_saved_successfully) + "!", Toast.LENGTH_SHORT).show();
