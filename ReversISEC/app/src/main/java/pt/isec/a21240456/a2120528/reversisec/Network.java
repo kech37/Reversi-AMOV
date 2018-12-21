@@ -1,16 +1,12 @@
 package pt.isec.a21240456.a2120528.reversisec;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -25,7 +21,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-public class NetworkAdapter {
+public class Network {
 
     public static final int SERVER = 0;
     public static final int CLIENT = 1;
@@ -48,7 +44,7 @@ public class NetworkAdapter {
     BufferedReader input;
     String inputString;
 
-    public NetworkAdapter(Context context, int mode) {
+    public Network(Context context, int mode) {
         this.context = context;
         this.mode = mode;
         hNet = new Handler();
@@ -161,13 +157,13 @@ public class NetworkAdapter {
                 input = new BufferedReader(new InputStreamReader(
                         socketGame.getInputStream()));
                 output = new PrintWriter(socketGame.getOutputStream());
-                ((PlayGame)context).NetReadyHandler.sendEmptyMessage(0);
+                ((PlayGameActivity)context).NetReadyHandler.sendEmptyMessage(0);
                 while (!Thread.currentThread().isInterrupted()) {
                     inputString = input.readLine();
                     hNet.post(new Runnable() {
                         @Override
                         public void run() {
-                            ((PlayGame)context).readPacket(inputString);
+                            ((PlayGameActivity)context).readPacket(inputString);
                         }
                     });
                 }

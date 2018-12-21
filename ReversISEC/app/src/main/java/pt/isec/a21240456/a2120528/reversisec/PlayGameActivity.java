@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,17 +27,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
-public class PlayGame extends AppCompatActivity {
+public class PlayGameActivity extends AppCompatActivity {
 	public static final int SINGLE_PLAYER = 1;
 	public static final int LOCAL_MULTYPLAYER = 2;
 	public static final int NETWORK_MULTYPLAYER = 3;
@@ -50,6 +44,7 @@ public class PlayGame extends AppCompatActivity {
 	private Player[] players = new Player[2];
 	
 	private int gameMode;
+	int showMoves;
 	private Context context;
 	private Board board = new Board();
 	
@@ -63,7 +58,7 @@ public class PlayGame extends AppCompatActivity {
 	private int totalTurns;
 	private int playerTurn;
 
-	private NetworkAdapter networkAdapter;
+	private Network network;
 	private String serverIP;
 
 	private Bitmap defaultImagebitmap;
@@ -84,6 +79,7 @@ public class PlayGame extends AppCompatActivity {
 		Intent intent = getIntent();
 		if(intent != null) {
 			gameMode = intent.getIntExtra("mode", SINGLE_PLAYER);
+			showMoves = intent.getIntExtra("moves", 0);
 		}
 		
 		
@@ -112,14 +108,14 @@ public class PlayGame extends AppCompatActivity {
 				break;
 			case NETWORK_MULTYPLAYER:
 				if(intent.getBooleanExtra("createServer", true)) {
-                    networkAdapter = new NetworkAdapter(context, NetworkAdapter.SERVER);
-                    networkAdapter.startNetwork();
-                    networkAdapter.startServerSide();
+                    network = new Network(context, Network.SERVER);
+                    network.startNetwork();
+                    network.startServerSide();
 				} else {
 					serverIP = "10.0.2.2";
-					networkAdapter = new NetworkAdapter(context, NetworkAdapter.CLIENT);
-					networkAdapter.startNetwork();
-					networkAdapter.startClientSide(serverIP);
+					network = new Network(context, Network.CLIENT);
+					network.startNetwork();
+					network.startClientSide(serverIP);
 				}
 				players[1] = new Player(intent.getStringExtra("player2Name"), defaultImagebitmap, false);
 				break;
@@ -127,7 +123,7 @@ public class PlayGame extends AppCompatActivity {
 		
 		initBoardGame();
 
-        if(gameMode != NETWORK_MULTYPLAYER || networkAdapter.getMode() == NetworkAdapter.SERVER)
+        if(gameMode != NETWORK_MULTYPLAYER || network.getMode() == Network.SERVER)
 		    initGame();
         }
 	
@@ -297,7 +293,10 @@ public class PlayGame extends AppCompatActivity {
 						ivCells[i][j].setBackground(drawCells[2]);
 						break;
 					case Board.POSSIBLE_MOVE:
-						ivCells[i][j].setBackground(drawCells[3]);
+						if(showMoves == 0)
+							ivCells[i][j].setBackground(drawCells[0]);
+						else
+							ivCells[i][j].setBackground(drawCells[3]);
 						break;
 				}
 			}
@@ -402,7 +401,7 @@ public class PlayGame extends AppCompatActivity {
         }
         else {
             gameMode = LOCAL_MULTYPLAYER;
-            
+
         }
     }
 	
@@ -549,7 +548,7 @@ public class PlayGame extends AppCompatActivity {
 			dialogOkbtn.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					((PlayGame)context).sendProfilePacket();
+					((PlayGameActivity)context).sendProfilePacket();
 					dialog.dismiss();
 				}
 			});
@@ -571,7 +570,7 @@ public class PlayGame extends AppCompatActivity {
     public void sendProfilePacket(){
 		Packet p = new Packet(players[0]);
 		String s = serializePacket(p);
-		networkAdapter.sendSerializedPacket(s);
+		network.sendSerializedPacket(s);
 	}
 
 	private void sendGamePacket(int row, int col){
@@ -579,7 +578,7 @@ public class PlayGame extends AppCompatActivity {
 				players[0].getPlayAgainCard(),
 				players[0].getSkipAgainCard());
 		String s = serializePacket(p);
-		networkAdapter.sendSerializedPacket(s);
+		network.sendSerializedPacket(s);
 	}
 
 	public void readPacket(String inputString) {
@@ -597,7 +596,7 @@ public class PlayGame extends AppCompatActivity {
 		players[1] = new Player(p.getPlayer().getName(),
 				p.getPlayer().getImage(),
 				p.getPlayer().isBot());
-		if(networkAdapter.getMode() == NetworkAdapter.CLIENT) {
+		if(network.getMode() == Network.CLIENT) {
 			if (players[1].getColor() == Board.BLACK) {
 				players[0].setColor(Board.WHITE);
 				playerTurn = 1;
@@ -609,7 +608,7 @@ public class PlayGame extends AppCompatActivity {
 				Toast.makeText(context, "I'm black", Toast.LENGTH_SHORT).show();
 			}
 		}
-		else if(networkAdapter.getMode() == NetworkAdapter.SERVER) {
+		else if(network.getMode() == Network.SERVER) {
 		    if (players[0].getColor() == Board.WHITE) {
                 players[1].setColor(Board.BLACK);
                 playerTurn = 1;

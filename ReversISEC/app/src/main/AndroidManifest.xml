@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlayGame" />
+        <activity android:name=".PlayGameActivity" />
         <activity android:name=".ConfigProfile" />
-        <activity android:name=".GameHistory" />
+        <activity android:name=".GameHistoryActivity" />
     </application>
 
 </manifest>

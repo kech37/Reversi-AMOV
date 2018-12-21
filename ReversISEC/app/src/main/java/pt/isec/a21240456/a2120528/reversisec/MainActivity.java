@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.ToggleButton;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,6 +23,7 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
 	private Dialog dialog;
 	private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer, btnCreateServer, btnJoinServer;
+    private Switch moveSwitch;
 	private EditText etInputText, etServerIP;
 	private ImageView ivClosePopupLose, ivClosePopupLoseMultiplayer, ivClosePopupConnectionType, ivClosePopupServerIP;
 	private String player2Name;
@@ -32,14 +35,21 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		
 		dialog = new Dialog(this);
+
+        moveSwitch = (Switch) findViewById(R.id.showPlaysSwitch);
+
 	}
 	
 	public void onSinglePlayer(View view) {
-		Intent intent = new Intent(this, PlayGame.class);
+		Intent intent = new Intent(this, PlayGameActivity.class);
 		if(!checkConfigFile(intent)) {
 			showProfileWarningDialog();
 		} else {
-			intent.putExtra("mode", PlayGame.SINGLE_PLAYER);
+			intent.putExtra("mode", PlayGameActivity.SINGLE_PLAYER);
+			if(moveSwitch.isChecked())
+				intent.putExtra("moves", 1);
+			else
+				intent.putExtra("moves", 0);
 			startActivity(intent);
 		}
 	}
@@ -92,11 +102,17 @@ public class MainActivity extends AppCompatActivity {
 			public void onClick(View view) {
 				player2Name = etInputText.getText().toString();
 				dialog.dismiss();
-				Intent intent = new Intent(getApplicationContext(), PlayGame.class);
+				Intent intent = new Intent(getApplicationContext(), PlayGameActivity.class);
+
+				if(moveSwitch.isChecked())
+					intent.putExtra("moves", 1);
+				else
+					intent.putExtra("moves", 0);
+
 				if(!checkConfigFile(intent)) {
 					showProfileWarningDialog();
 				} else {
-					intent.putExtra("mode", PlayGame.LOCAL_MULTYPLAYER);
+					intent.putExtra("mode", PlayGameActivity.LOCAL_MULTYPLAYER);
 					intent.putExtra("player2Name", player2Name);
 					startActivity(intent);
 				}
@@ -164,11 +180,17 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	private void multiplayerActivityCreate(boolean createServer) {
-		Intent intent = new Intent(getApplicationContext(), PlayGame.class);
+		Intent intent = new Intent(getApplicationContext(), PlayGameActivity.class);
+
+		if(moveSwitch.isChecked())
+			intent.putExtra("moves", 1);
+		else
+			intent.putExtra("moves", 0);
+
 		if(!checkConfigFile(intent)) {
 			showProfileWarningDialog();
 		} else {
-			intent.putExtra("mode", PlayGame.NETWORK_MULTYPLAYER);
+			intent.putExtra("mode", PlayGameActivity.NETWORK_MULTYPLAYER);
 			intent.putExtra("createServer", createServer);
 			startActivity(intent);
 		}
@@ -225,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	public void onOlderGames(View view) {
-		Intent intent = new Intent(this, GameHistory.class);
+		Intent intent = new Intent(this, GameHistoryActivity.class);
 		startActivity(intent);
 	}
 }

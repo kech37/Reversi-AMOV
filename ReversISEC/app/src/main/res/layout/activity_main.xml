@@ -69,4 +69,10 @@
             android:onClick="onOlderGames"/>
 
     </LinearLayout>
+
+    <Switch
+        android:id="@+id/showPlaysSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch" />
 </FrameLayout>

@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameHistory extends AppCompatActivity {
+public class GameHistoryActivity extends AppCompatActivity {
 	private boolean res = false;
 	private Dialog dialog;
 	
