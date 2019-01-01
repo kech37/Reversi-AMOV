@@ -90,9 +90,9 @@ public class PlayGameActivity extends AppCompatActivity {
 				defaultImagebitmap = drawableToBitmap(getDrawable(R.drawable.ic_person_black_208dp));
 				if(imgFile.exists()) {
 					players[0] = new Player(tvPlayerTurn.getText().toString(), BitmapFactory.decodeFile(imgFile.getAbsolutePath()), false);
-				} else {
-					players[0] = new Player(tvPlayerTurn.getText().toString(), defaultImagebitmap, false);
 				}
+			}else{
+				players[0] = new Player(tvPlayerTurn.getText().toString(), defaultImagebitmap, false);
 			}
 		}
 		
@@ -270,7 +270,9 @@ public class PlayGameActivity extends AppCompatActivity {
 	
 	public void drawBoard() {
 		tvPlayerTurn.setText(players[playerTurn].getName());
-		ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+		if(players[playerTurn].getImage() != null){
+			ivProfilePicture.setImageBitmap(players[playerTurn].getImage());
+		}
 		if(players[playerTurn].getColor() == Board.BLACK) {
 			backScoreBoard.setBackground(getDrawable(R.drawable.cell_empty_bg));
 			whiteScoreBoard.setBackground(getDrawable(R.drawable.cell_possible_move));
