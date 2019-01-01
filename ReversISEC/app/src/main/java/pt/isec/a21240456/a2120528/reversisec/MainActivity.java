@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+//TODO ele crasha se não criares imagem no perfil
+
 public class MainActivity extends AppCompatActivity {
 	private Dialog dialog;
 	private Button dialogOkbtn, btnLocalMultiplayer, btnNetworkMultiplayer, btnCreateServer, btnJoinServer;

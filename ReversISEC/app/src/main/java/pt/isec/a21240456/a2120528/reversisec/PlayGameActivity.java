@@ -248,7 +248,6 @@ public class PlayGameActivity extends AppCompatActivity {
 						}
 						break;
 					case NETWORK_MULTYPLAYER:
-						//TODO Skip card
 						break;
 				}
 				drawBoard();
